@@ -1,0 +1,667 @@
+{
+  "reconciliation_id": "f267135a-9a8a-4a08-86e6-4f8b03677dc1",
+  "instrument": "MNQ",
+  "tick_size": 0.25,
+  "ibkr_path": "data\\raw\\ibkr\\cfefb4b2-2682-48b0-a39e-eb58428783e0\\MNQ_5m_final.parquet",
+  "ninjatrader_path": "data\\raw\\ninjatrader\\38c43d15-0deb-4719-8dee-effa1158cab5\\MNQ_5m.parquet",
+  "ibkr_rows": 5400,
+  "ninjatrader_rows_in_ibkr_window": 9194,
+  "ninjatrader_rows_total": 9278,
+  "window_start_utc": "2026-05-20 13:30:00+00:00",
+  "window_end_utc": "2026-08-14 20:55:00+00:00",
+  "common_coverage": {
+    "timestamps": 2880,
+    "left_only": 6314,
+    "right_only": 2520
+  },
+  "price_discrepancy_count": 11506,
+  "conflict_timestamps": 2880,
+  "conflict_rate": 1.0,
+  "price_stats": {
+    "close_corr": 0.8953499511805972,
+    "close_exact_match_rate": 0.00034722222222222224,
+    "close_within_1_tick_rate": 0.0020833333333333333,
+    "close_within_4_ticks_rate": 0.0038194444444444443,
+    "close_abs_diff_median": 188.0,
+    "close_abs_diff_p95": 485.52499999999986,
+    "close_abs_diff_max": 827.25
+  },
+  "volume_rel_diff": {
+    "mean_abs_pct": 0.7615145040262825,
+    "note": "Volume differences are informative; not automatic dataset failure"
+  },
+  "quarantine_count": 11506,
+  "quarantine_sample": [
+    {
+      "timestamp_utc": "2026-06-16T13:30:00+00:00",
+      "field": "open",
+      "source_a_value": 30825.0,
+      "source_b_value": 30812.0,
+      "reason": "open differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:30:00+00:00",
+      "field": "high",
+      "source_a_value": 30833.0,
+      "source_b_value": 30818.5,
+      "reason": "high differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:30:00+00:00",
+      "field": "low",
+      "source_a_value": 30823.5,
+      "source_b_value": 30750.75,
+      "reason": "low differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:30:00+00:00",
+      "field": "close",
+      "source_a_value": 30832.0,
+      "source_b_value": 30792.25,
+      "reason": "close differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:35:00+00:00",
+      "field": "open",
+      "source_a_value": 30831.5,
+      "source_b_value": 30792.5,
+      "reason": "open differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:35:00+00:00",
+      "field": "high",
+      "source_a_value": 30837.25,
+      "source_b_value": 30839.75,
+      "reason": "high differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:35:00+00:00",
+      "field": "low",
+      "source_a_value": 30822.0,
+      "source_b_value": 30780.0,
+      "reason": "low differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:35:00+00:00",
+      "field": "close",
+      "source_a_value": 30825.5,
+      "source_b_value": 30782.0,
+      "reason": "close differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:40:00+00:00",
+      "field": "open",
+      "source_a_value": 30825.25,
+      "source_b_value": 30781.75,
+      "reason": "open differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:40:00+00:00",
+      "field": "high",
+      "source_a_value": 30835.25,
+      "source_b_value": 30860.75,
+      "reason": "high differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:40:00+00:00",
+      "field": "low",
+      "source_a_value": 30818.0,
+      "source_b_value": 30780.0,
+      "reason": "low differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:40:00+00:00",
+      "field": "close",
+      "source_a_value": 30821.5,
+      "source_b_value": 30818.25,
+      "reason": "close differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:45:00+00:00",
+      "field": "open",
+      "source_a_value": 30821.5,
+      "source_b_value": 30818.0,
+      "reason": "open differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:45:00+00:00",
+      "field": "high",
+      "source_a_value": 30829.0,
+      "source_b_value": 30883.5,
+      "reason": "high differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:45:00+00:00",
+      "field": "low",
+      "source_a_value": 30815.25,
+      "source_b_value": 30812.75,
+      "reason": "low differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:45:00+00:00",
+      "field": "close",
+      "source_a_value": 30816.5,
+      "source_b_value": 30861.25,
+      "reason": "close differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:50:00+00:00",
+      "field": "open",
+      "source_a_value": 30816.25,
+      "source_b_value": 30861.75,
+      "reason": "open differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:50:00+00:00",
+      "field": "high",
+      "source_a_value": 30822.25,
+      "source_b_value": 30884.25,
+      "reason": "high differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:50:00+00:00",
+      "field": "low",
+      "source_a_value": 30810.5,
+      "source_b_value": 30843.75,
+      "reason": "low differs by more than 1 tick between ninjatrader and ibkr"
+    },
+    {
+      "timestamp_utc": "2026-06-16T13:50:00+00:00",
+      "field": "close",
+      "source_a_value": 30815.0,
+      "source_b_value": 30869.5,
+      "reason": "close differs by more than 1 tick between ninjatrader and ibkr"
+    }
+  ],
+  "quality_ibkr": {
+    "duplicate_count": 0,
+    "gap_count": 59,
+    "gaps": [
+      {
+        "start_utc": "2026-05-20T20:55:00+00:00",
+        "end_utc": "2026-05-21T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-21T20:55:00+00:00",
+        "end_utc": "2026-05-22T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-22T20:55:00+00:00",
+        "end_utc": "2026-05-26T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-26T20:55:00+00:00",
+        "end_utc": "2026-05-27T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-27T20:55:00+00:00",
+        "end_utc": "2026-05-28T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-28T20:55:00+00:00",
+        "end_utc": "2026-05-29T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-29T20:55:00+00:00",
+        "end_utc": "2026-06-01T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-01T20:55:00+00:00",
+        "end_utc": "2026-06-02T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-02T20:55:00+00:00",
+        "end_utc": "2026-06-03T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-03T20:55:00+00:00",
+        "end_utc": "2026-06-04T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-04T20:55:00+00:00",
+        "end_utc": "2026-06-05T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-05T20:55:00+00:00",
+        "end_utc": "2026-06-08T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-08T20:55:00+00:00",
+        "end_utc": "2026-06-09T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-09T20:55:00+00:00",
+        "end_utc": "2026-06-10T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-10T20:55:00+00:00",
+        "end_utc": "2026-06-11T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-11T20:55:00+00:00",
+        "end_utc": "2026-06-12T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-12T20:55:00+00:00",
+        "end_utc": "2026-06-15T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-15T20:55:00+00:00",
+        "end_utc": "2026-06-16T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-16T20:55:00+00:00",
+        "end_utc": "2026-06-17T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-17T20:55:00+00:00",
+        "end_utc": "2026-06-18T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-18T20:55:00+00:00",
+        "end_utc": "2026-06-22T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-22T20:55:00+00:00",
+        "end_utc": "2026-06-23T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-23T20:55:00+00:00",
+        "end_utc": "2026-06-24T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-24T20:55:00+00:00",
+        "end_utc": "2026-06-25T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-25T20:55:00+00:00",
+        "end_utc": "2026-06-26T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-26T20:55:00+00:00",
+        "end_utc": "2026-06-29T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-29T20:55:00+00:00",
+        "end_utc": "2026-06-30T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-30T20:55:00+00:00",
+        "end_utc": "2026-07-01T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-01T20:55:00+00:00",
+        "end_utc": "2026-07-02T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-02T20:55:00+00:00",
+        "end_utc": "2026-07-06T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-06T20:55:00+00:00",
+        "end_utc": "2026-07-07T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-07T20:55:00+00:00",
+        "end_utc": "2026-07-08T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-08T20:55:00+00:00",
+        "end_utc": "2026-07-09T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-09T20:55:00+00:00",
+        "end_utc": "2026-07-10T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-10T20:55:00+00:00",
+        "end_utc": "2026-07-13T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-13T20:55:00+00:00",
+        "end_utc": "2026-07-14T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-14T20:55:00+00:00",
+        "end_utc": "2026-07-15T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-15T20:55:00+00:00",
+        "end_utc": "2026-07-16T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-16T20:55:00+00:00",
+        "end_utc": "2026-07-17T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-17T20:55:00+00:00",
+        "end_utc": "2026-07-20T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-20T20:55:00+00:00",
+        "end_utc": "2026-07-21T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-21T20:55:00+00:00",
+        "end_utc": "2026-07-22T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-22T20:55:00+00:00",
+        "end_utc": "2026-07-23T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-23T20:55:00+00:00",
+        "end_utc": "2026-07-24T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-24T20:55:00+00:00",
+        "end_utc": "2026-07-27T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-27T20:55:00+00:00",
+        "end_utc": "2026-07-28T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-28T20:55:00+00:00",
+        "end_utc": "2026-07-29T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-29T20:55:00+00:00",
+        "end_utc": "2026-07-30T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-30T20:55:00+00:00",
+        "end_utc": "2026-07-31T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-31T20:55:00+00:00",
+        "end_utc": "2026-08-03T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-03T20:55:00+00:00",
+        "end_utc": "2026-08-04T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-04T20:55:00+00:00",
+        "end_utc": "2026-08-05T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-05T20:55:00+00:00",
+        "end_utc": "2026-08-06T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-06T20:55:00+00:00",
+        "end_utc": "2026-08-07T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-07T20:55:00+00:00",
+        "end_utc": "2026-08-10T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-10T20:55:00+00:00",
+        "end_utc": "2026-08-11T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-11T20:55:00+00:00",
+        "end_utc": "2026-08-12T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-12T20:55:00+00:00",
+        "end_utc": "2026-08-13T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-13T20:55:00+00:00",
+        "end_utc": "2026-08-14T13:30:00+00:00",
+        "classification": "session_closed"
+      }
+    ],
+    "ohlc_violations": 0,
+    "quality_status": "usable",
+    "schema_ok": true
+  },
+  "quality_ninjatrader_window": {
+    "duplicate_count": 0,
+    "gap_count": 34,
+    "gaps": [
+      {
+        "start_utc": "2026-06-17T04:00:00+00:00",
+        "end_utc": "2026-06-17T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-06-18T04:00:00+00:00",
+        "end_utc": "2026-06-18T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-06-19T04:00:00+00:00",
+        "end_utc": "2026-06-19T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-06-20T00:00:00+00:00",
+        "end_utc": "2026-06-22T05:05:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-23T04:00:00+00:00",
+        "end_utc": "2026-06-23T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-06-24T04:00:00+00:00",
+        "end_utc": "2026-06-24T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-06-25T04:00:00+00:00",
+        "end_utc": "2026-06-25T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-06-26T04:00:00+00:00",
+        "end_utc": "2026-06-26T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-06-27T04:00:00+00:00",
+        "end_utc": "2026-06-29T05:05:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-30T04:00:00+00:00",
+        "end_utc": "2026-06-30T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-07-01T04:00:00+00:00",
+        "end_utc": "2026-07-01T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-07-02T04:00:00+00:00",
+        "end_utc": "2026-07-02T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-07-03T04:00:00+00:00",
+        "end_utc": "2026-07-03T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-07-04T00:00:00+00:00",
+        "end_utc": "2026-07-06T05:05:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-07T04:00:00+00:00",
+        "end_utc": "2026-07-07T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-07-08T04:00:00+00:00",
+        "end_utc": "2026-07-08T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-07-09T04:00:00+00:00",
+        "end_utc": "2026-07-09T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-07-10T04:00:00+00:00",
+        "end_utc": "2026-07-10T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-07-11T04:00:00+00:00",
+        "end_utc": "2026-07-13T05:05:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-14T04:00:00+00:00",
+        "end_utc": "2026-07-14T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-07-15T04:00:00+00:00",
+        "end_utc": "2026-07-15T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-07-16T04:00:00+00:00",
+        "end_utc": "2026-07-16T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-07-17T04:00:00+00:00",
+        "end_utc": "2026-07-17T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-07-18T04:00:00+00:00",
+        "end_utc": "2026-07-20T05:05:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-21T04:00:00+00:00",
+        "end_utc": "2026-07-21T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-07-22T04:00:00+00:00",
+        "end_utc": "2026-07-22T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-07-23T04:00:00+00:00",
+        "end_utc": "2026-07-23T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-07-24T04:00:00+00:00",
+        "end_utc": "2026-07-24T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-07-24T22:05:00+00:00",
+        "end_utc": "2026-07-24T22:55:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-07-25T04:00:00+00:00",
+        "end_utc": "2026-08-10T05:05:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-11T04:00:00+00:00",
+        "end_utc": "2026-08-11T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-08-12T04:00:00+00:00",
+        "end_utc": "2026-08-12T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-08-13T04:00:00+00:00",
+        "end_utc": "2026-08-13T05:05:00+00:00",
+        "classification": "maintenance"
+      },
+      {
+        "start_utc": "2026-08-14T04:00:00+00:00",
+        "end_utc": "2026-08-14T05:05:00+00:00",
+        "classification": "maintenance"
+      }
+    ],
+    "ohlc_violations": 0,
+    "quality_status": "usable",
+    "schema_ok": true
+  },
+  "preferred_source_recommendation": "ibkr_canonical_nt_quarantine",
+  "notes": [
+    "Timestamps aligned in UTC after NT America/Chicago localization.",
+    "OHLC vendor differences beyond 1 tick are quarantined (no silent merge).",
+    "Volume relative differences are informative only.",
+    "IBKR series was requested with useRTH=True; NT chart may include broader session bars outside overlap."
+  ],
+  "created_at_utc": "2026-08-15T14:36:16.237444+00:00"
+}
