@@ -1,11 +1,13 @@
-"""Research analysis orchestration (deterministic tools + optional LLM stub)."""
+"""Research analysis orchestration — tools first, DeepSeek synthesizes, verifier guards numbers."""
 
 from __future__ import annotations
 
-import re
+import json
 import uuid
+from pathlib import Path
 from typing import Any
 
+from tradelab.agents.llm import chat_completion, llm_configured
 from tradelab.agents.schema import AnalysisOutput, MetricRef, SourceRef, verify_analysis
 from tradelab.agents.tools import (
     get_dataset_quality,
@@ -14,6 +16,7 @@ from tradelab.agents.tools import (
     search_research_documents,
 )
 from tradelab.datasets.store import upsert_analysis
+from tradelab.observability.settings import get_settings
 
 
 def _is_prediction_request(query: str) -> bool:
@@ -24,14 +27,93 @@ def _is_prediction_request(query: str) -> bool:
     )
 
 
+def _load_system_prompt() -> str:
+    path = Path(__file__).resolve().parents[1] / "prompts" / "system_research.j2"
+    base = path.read_text(encoding="utf-8") if path.exists() else ""
+    return (
+        base
+        + "\n\nYou MUST reply with a JSON object only, keys: "
+        "answer (string), assumptions (string[]), warnings (string[]), confidence (0..1). "
+        "Do NOT invent financial figures. Use ONLY numbers present in EVIDENCE. "
+        "If evidence is insufficient, say so clearly. Research-only: never suggest live orders."
+    )
+
+
+def _collect_evidence(
+    *,
+    query: str,
+    dataset_id: str | None,
+    experiment_id: str | None,
+) -> tuple[list[dict[str, Any]], list[MetricRef], list[SourceRef], set[tuple[str, str, str]], set[str], dict[str, Any]]:
+    invocations: list[dict[str, Any]] = []
+    metrics: list[MetricRef] = []
+    sources: list[SourceRef] = []
+    known_metrics: set[tuple[str, str, str]] = set()
+    known_docs: set[str] = set()
+    pack: dict[str, Any] = {"query": query, "dataset": None, "experiment": None, "trades_sample": [], "documents": []}
+
+    if dataset_id:
+        quality = get_dataset_quality(dataset_id)
+        invocations.append({"tool_name": "get_dataset_quality", "arguments": {"dataset_id": dataset_id}})
+        pack["dataset"] = quality
+
+    if experiment_id:
+        m = get_experiment_metrics(experiment_id)
+        invocations.append({"tool_name": "get_experiment_metrics", "arguments": {"experiment_id": experiment_id}})
+        pack["experiment"] = m
+        by_split = m.get("metrics_by_split") or {}
+        for split_name, blob in by_split.items():
+            if not isinstance(blob, dict) or blob.get("blocked"):
+                continue
+            for key in ("net_pnl", "trade_count", "win_rate", "max_drawdown", "profit_factor", "expectancy"):
+                if key in blob:
+                    name = f"{key}_{split_name}"
+                    metrics.append(MetricRef(name=name, value=blob[key], experiment_id=experiment_id))
+                    known_metrics.add((name, str(blob[key]), experiment_id))
+        trades = get_trade_sample(experiment_id, limit=5)
+        invocations.append({"tool_name": "get_trade_sample", "arguments": {"experiment_id": experiment_id, "limit": 5}})
+        pack["trades_sample"] = trades
+
+    docs = search_research_documents(query, top_k=3)
+    invocations.append({"tool_name": "search_research_documents", "arguments": {"query": query, "top_k": 3}})
+    pack["documents"] = docs
+    for d in docs:
+        known_docs.add(d["document_id"])
+        sources.append(
+            SourceRef(document_id=d["document_id"], citation=d.get("excerpt", "")[:240], chunk_id=d.get("chunk_id"))
+        )
+
+    return invocations, metrics, sources, known_metrics, known_docs, pack
+
+
+def _fallback_answer(pack: dict[str, Any], metrics: list[MetricRef]) -> str:
+    parts: list[str] = []
+    if pack.get("dataset"):
+        d = pack["dataset"]
+        parts.append(
+            f"Dataset {d.get('dataset_id')} status={d.get('quality_status')} gaps={d.get('gap_count', 0)}."
+        )
+    if pack.get("experiment"):
+        e = pack["experiment"]
+        by = e.get("metrics_by_split") or {}
+        train, val = by.get("train") or {}, by.get("validation") or {}
+        parts.append(
+            f"Experimento {e.get('experiment_id')} hash={e.get('integrity_hash')}. "
+            f"net_pnl train={train.get('net_pnl')} validation={val.get('net_pnl')}."
+        )
+    if not parts and metrics:
+        parts.append("Métricas recuperadas de tools tipadas.")
+    return " ".join(parts) if parts else "Evidencia insuficiente."
+
+
 def run_analysis(
     *,
     query: str,
     dataset_id: str | None = None,
     experiment_id: str | None = None,
 ) -> dict[str, Any]:
+    get_settings.cache_clear()
     analysis_id = str(uuid.uuid4())
-    invocations: list[dict[str, Any]] = []
 
     if _is_prediction_request(query):
         out = AnalysisOutput(
@@ -43,65 +125,17 @@ def run_analysis(
             warnings=["Política research-only: predicción de precios fuera de alcance"],
             sources=[],
             confidence=1.0,
-            tool_invocations=invocations,
+            tool_invocations=[],
         )
         record = out.model_dump()
         upsert_analysis(record)
         return record
 
-    known_metrics: set[tuple[str, str, str]] = set()
-    known_docs: set[str] = set()
-    metrics: list[MetricRef] = []
-    sources: list[SourceRef] = []
-    answer_parts: list[str] = []
+    invocations, metrics, sources, known_metrics, known_docs, pack = _collect_evidence(
+        query=query, dataset_id=dataset_id, experiment_id=experiment_id
+    )
 
-    if dataset_id:
-        quality = get_dataset_quality(dataset_id)
-        invocations.append({"tool_name": "get_dataset_quality", "arguments": {"dataset_id": dataset_id}})
-        answer_parts.append(
-            f"Dataset {dataset_id} tiene quality_status={quality.get('quality_status')} "
-            f"con {quality.get('gap_count', 0)} gaps clasificados."
-        )
-
-    if experiment_id:
-        m = get_experiment_metrics(experiment_id)
-        invocations.append({"tool_name": "get_experiment_metrics", "arguments": {"experiment_id": experiment_id}})
-        by_split = m.get("metrics_by_split") or {}
-        train = by_split.get("train") or {}
-        val = by_split.get("validation") or {}
-        for split_name, blob in (("train", train), ("validation", val)):
-            if isinstance(blob, dict) and "net_pnl" in blob:
-                metrics.append(
-                    MetricRef(name=f"net_pnl_{split_name}", value=blob["net_pnl"], experiment_id=experiment_id)
-                )
-                known_metrics.add((f"net_pnl_{split_name}", str(blob["net_pnl"]), experiment_id))
-                metrics.append(
-                    MetricRef(
-                        name=f"trade_count_{split_name}",
-                        value=blob.get("trade_count", 0),
-                        experiment_id=experiment_id,
-                    )
-                )
-                known_metrics.add(
-                    (f"trade_count_{split_name}", str(blob.get("trade_count", 0)), experiment_id)
-                )
-        answer_parts.append(
-            "Comparación train vs validation usando métricas del experimento "
-            f"{experiment_id} (hash {m.get('integrity_hash')}). "
-            f"net_pnl train={train.get('net_pnl')} validation={val.get('net_pnl')}."
-        )
-        _ = get_trade_sample(experiment_id, limit=5)
-        invocations.append({"tool_name": "get_trade_sample", "arguments": {"experiment_id": experiment_id, "limit": 5}})
-
-    docs = search_research_documents(query, top_k=3)
-    invocations.append({"tool_name": "search_research_documents", "arguments": {"query": query, "top_k": 3}})
-    for d in docs:
-        known_docs.add(d["document_id"])
-        sources.append(
-            SourceRef(document_id=d["document_id"], citation=d.get("excerpt", "")[:240], chunk_id=d.get("chunk_id"))
-        )
-
-    if not answer_parts and not docs:
+    if not metrics and not pack.get("dataset") and not pack.get("documents"):
         out = AnalysisOutput(
             analysis_id=analysis_id,
             status="insufficient_evidence",
@@ -113,23 +147,63 @@ def run_analysis(
             confidence=0.1,
             tool_invocations=invocations,
         )
-    else:
-        out = AnalysisOutput(
-            analysis_id=analysis_id,
-            status="completed",
-            answer=" ".join(answer_parts) if answer_parts else "Respuesta basada en documentos recuperados.",
-            metrics=metrics,
-            assumptions=["Las métricas provienen exclusivamente de tools tipadas"],
-            warnings=[],
-            sources=sources,
-            confidence=0.85 if experiment_id else 0.6,
-            tool_invocations=invocations,
-        )
+        record = out.model_dump()
+        upsert_analysis(record)
+        return record
 
+    llm_meta: dict[str, Any] = {"provider": "stub"}
+    assumptions = ["Las métricas provienen exclusivamente de tools tipadas"]
+    warnings: list[str] = []
+    confidence = 0.85 if experiment_id else 0.6
+    answer = _fallback_answer(pack, metrics)
+
+    if llm_configured():
+        try:
+            system = _load_system_prompt()
+            user = (
+                "USER_QUESTION:\n"
+                f"{query}\n\n"
+                "EVIDENCE (JSON from typed tools — numbers are ground truth):\n"
+                f"{json.dumps(pack, default=str)}\n\n"
+                "Write a clear Spanish research answer grounded only in EVIDENCE."
+            )
+            result = chat_completion(system=system, user=user)
+            parsed = result["parsed"]
+            if isinstance(parsed.get("answer"), str) and parsed["answer"].strip():
+                answer = parsed["answer"].strip()
+            if isinstance(parsed.get("assumptions"), list):
+                assumptions = [str(a) for a in parsed["assumptions"]] or assumptions
+            if isinstance(parsed.get("warnings"), list):
+                warnings = [str(w) for w in parsed["warnings"]]
+            if isinstance(parsed.get("confidence"), (int, float)):
+                confidence = float(max(0.0, min(1.0, parsed["confidence"])))
+            llm_meta = {
+                "provider": "openai_compatible",
+                "model": result.get("model"),
+                "base_url": result.get("base_url"),
+                "usage": result.get("usage"),
+            }
+        except Exception as exc:  # noqa: BLE001
+            warnings.append(f"LLM unavailable, using deterministic fallback: {exc}")
+            llm_meta = {"provider": "fallback", "error": str(exc)}
+    else:
+        warnings.append("LLM_API_KEY not set — deterministic synthesis only")
+
+    out = AnalysisOutput(
+        analysis_id=analysis_id,
+        status="completed",
+        answer=answer,
+        metrics=metrics,
+        assumptions=assumptions,
+        warnings=warnings,
+        sources=sources,
+        confidence=confidence,
+        tool_invocations=invocations,
+    )
     verified = verify_analysis(out, known_metric_values=known_metrics, known_document_ids=known_docs or {"none"})
-    # If no docs, allow empty sources without failing unknown-id check
     if not sources:
         verified = out
     record = verified.model_dump()
+    record["llm"] = llm_meta
     upsert_analysis(record)
     return record

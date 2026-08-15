@@ -14,9 +14,10 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+psycopg://tradelab:tradelab@localhost:5432/tradelab"
     data_root: Path = Path("./data")
     demo_mode: bool = True
+    # DeepSeek (OpenAI-compatible). Override via .env
     llm_api_key: str = ""
-    llm_base_url: str = ""
-    llm_model: str = "gpt-4o-mini"
+    llm_base_url: str = "https://api.deepseek.com"
+    llm_model: str = "deepseek-chat"
     api_host: str = "0.0.0.0"
     api_port: int = 8000
     log_level: str = "INFO"
