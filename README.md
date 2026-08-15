@@ -35,6 +35,14 @@ Sigue el quickstart de la feature:
 
 - [`specs/001-tradelab-mvp/quickstart.md`](specs/001-tradelab-mvp/quickstart.md)
 
+Indexar informes para el copiloto (RAG):
+
+```bash
+tradelab-index-rag
+```
+
+Detalle: [`docs/demo/rag_setup.md`](docs/demo/rag_setup.md)
+
 ## Spec Kit
 
 Constitución, spec, plan y tareas viven en `.specify/` y `specs/001-tradelab-mvp/`.

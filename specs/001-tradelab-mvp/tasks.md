@@ -156,7 +156,7 @@ description: Task list for TradeLab AI MVP implementation
 - [x] T055 [US3] Implement structured response models + post-hoc verifier in `src/tradelab/agents/schema.py` and `src/tradelab/agents/verifier.py`
 - [x] T056 [US3] Implement analysis + documents API routers in `apps/api/routers/analysis.py` and `apps/api/routers/documents.py`
 - [x] T057 [US3] Add Streamlit analysis page with citations panel in `apps/ui/pages/3_Analysis.py`
-- [x] T058 [US3] Seed golden eval dataset skeleton (30–40 Q stubs) in `evals/golden/questions.jsonl` and runner `evals/golden/run_eval.py` measuring schema/tools/citations thresholds
+- [x] T058 [US3] Seed golden eval dataset skeleton (30–40 Q stubs) in `evals/golden/questions.jsonl` and runner `evals/golden/test_golden_eval.py` measuring schema/tools/citations thresholds
 
 **Checkpoint**: US3 independiente — quickstart §4–5; tool allowlist sin órdenes
 

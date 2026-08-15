@@ -34,11 +34,10 @@ def api_list_experiments(dataset_id: str | None = None) -> dict:
 
 @router.post("/v1/experiments", status_code=201)
 def api_run_backtest(body: RunBacktestRequest) -> dict:
-    if body.strategy_id != "orb_atr_intraday":
-        raise HTTPException(status_code=400, detail="unsupported strategy")
     try:
         return run_experiment(
             dataset_id=body.dataset_id,
+            strategy_id=body.strategy_id,
             parameters=body.parameters,
             consume_holdout=body.consume_holdout,
             split_spec=body.split_spec,

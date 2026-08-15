@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from tradelab.backtesting.service import run_experiment
-from tradelab.backtesting.strategies.orb_atr import STRATEGY_ID, allowed_parameters_schema
+from tradelab.backtesting.strategies.registry import list_strategy_specs
 from tradelab.datasets.store import get_dataset, get_experiment, list_datasets
 from tradelab.quality.reconcile import reconcile_frames
 
@@ -53,9 +53,15 @@ def compare_sources_tool(
     return reconcile_frames(left_bars, right_bars, tick_size=Decimal(str(tick_size)))
 
 
-def run_backtest_tool(dataset_id: str, allowed_parameters: dict[str, Any], consume_holdout: bool = False) -> dict[str, Any]:
+def run_backtest_tool(
+    dataset_id: str,
+    allowed_parameters: dict[str, Any],
+    consume_holdout: bool = False,
+    strategy_id: str = "orb_atr_intraday",
+) -> dict[str, Any]:
     return run_experiment(
         dataset_id=dataset_id,
+        strategy_id=strategy_id,
         parameters=allowed_parameters,
         consume_holdout=consume_holdout,
     )
@@ -82,11 +88,15 @@ def get_trade_sample(experiment_id: str, *, split_label: str | None = None, limi
     return trades[:limit]
 
 
-def search_research_documents(query: str, *, top_k: int = 5) -> list[dict[str, Any]]:
-    # MVP: keyword search over in-memory/document store stubs
+def search_research_documents(
+    query: str,
+    *,
+    top_k: int = 5,
+    filters: dict[str, Any] | None = None,
+) -> list[dict[str, Any]]:
     from tradelab.rag.retrieve import hybrid_search
 
-    return hybrid_search(query, top_k=top_k)
+    return hybrid_search(query, top_k=top_k, filters=filters)
 
 
 def generate_experiment_report(experiment_id: str) -> dict[str, Any]:
@@ -102,14 +112,7 @@ def generate_experiment_report(experiment_id: str) -> dict[str, Any]:
 
 
 def list_strategies() -> list[dict[str, Any]]:
-    return [
-        {
-            "strategy_id": STRATEGY_ID,
-            "name": "Opening Range Breakout + ATR filter",
-            "version": "0.1.0",
-            "allowed_parameters_schema": allowed_parameters_schema(),
-        }
-    ]
+    return list_strategy_specs()
 
 
 def assert_tool_allowed(name: str) -> None:

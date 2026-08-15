@@ -39,4 +39,4 @@ def api_get_analysis(analysis_id: str) -> dict:
 
 @router.post("/v1/documents/search")
 def api_search_docs(body: DocumentSearchRequest) -> dict:
-    return {"items": hybrid_search(body.query, top_k=body.top_k)}
+    return {"items": hybrid_search(body.query, top_k=body.top_k, filters=body.filters)}

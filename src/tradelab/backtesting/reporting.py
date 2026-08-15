@@ -16,6 +16,7 @@ def write_experiment_report(experiment: dict[str, Any]) -> str:
         f"- strategy: `{experiment.get('strategy_id')}`",
         f"- integrity_hash: `{experiment.get('integrity_hash')}`",
         f"- holdout_consumed: `{experiment.get('holdout_consumed')}`",
+        f"- dataset_id: `{experiment.get('dataset_id')}`",
         "",
         "## Metrics by split",
         "",
@@ -25,4 +26,11 @@ def write_experiment_report(experiment: dict[str, Any]) -> str:
         "",
     ]
     path.write_text("\n".join(lines), encoding="utf-8")
+    try:
+        from tradelab.rag.indexer import index_file
+
+        index_file(path)
+    except Exception:
+        # Report write must succeed even if RAG index is unavailable.
+        pass
     return str(path)

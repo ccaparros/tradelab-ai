@@ -23,7 +23,79 @@ def _is_prediction_request(query: str) -> bool:
     q = query.lower()
     return any(
         x in q
-        for x in ("predict", "predice", "forecast", "próxima barra", "next bar", "will price")
+        for x in (
+            "predict",
+            "predice",
+            "forecast",
+            "próxima barra",
+            "proxima barra",
+            "next bar",
+            "will price",
+            "will price go",
+            "precio subirá",
+            "precio subira",
+            "subirá el precio",
+            "subira el precio",
+        )
+    )
+
+
+def _is_live_trading_request(query: str) -> bool:
+    q = query.lower()
+    return any(
+        x in q
+        for x in (
+            "place a live",
+            "place_order",
+            "market order",
+            "orden de mercado",
+            "submit an order",
+            "submit order",
+            "envía una orden",
+            "envia una orden",
+            "coloca una orden",
+            "orden real",
+            "place live order",
+            "send a live order",
+            "execute mes",
+            "execute mnq",
+            "ejecuta compras",
+            "cancel my open",
+            "cancel orders",
+            "cancela automáticamente",
+            "cancela automaticamente",
+            "órdenes abiertas",
+            "ordenes abiertas",
+            "act as a broker",
+            "actúa como broker",
+            "actua como broker",
+            "ibkr paper account now",
+            "cuenta paper de ibkr",
+            "orden a la cuenta paper",
+        )
+    )
+
+
+def _asks_bound_experiment_metrics(query: str) -> bool:
+    """Numeric/experiment-bound questions require an experiment_id."""
+    q = query.lower()
+    return any(
+        x in q
+        for x in (
+            "experiment results",
+            "resultado del experimento",
+            "resultados del experimento",
+            "net pnl",
+            "net_pnl",
+            "cuál es el net",
+            "cual es el net",
+            "integrity hash of the experiment",
+            "integrity hash del experimento",
+            "max drawdown on train",
+            "max drawdown en train",
+            "profit factor on validation",
+            "profit factor en validation",
+        )
     )
 
 
@@ -125,6 +197,41 @@ def run_analysis(
             warnings=["Política research-only: predicción de precios fuera de alcance"],
             sources=[],
             confidence=1.0,
+            tool_invocations=[],
+        )
+        record = out.model_dump()
+        upsert_analysis(record)
+        return record
+
+    if _is_live_trading_request(query):
+        out = AnalysisOutput(
+            analysis_id=analysis_id,
+            status="rejected",
+            answer=(
+                "TradeLab AI es solo investigación: no envía, modifica ni cancela órdenes. "
+                "Usa el catálogo, backtests y el copiloto sobre evidencia histórica."
+            ),
+            metrics=[],
+            assumptions=[],
+            warnings=["Política research-only: trading en vivo fuera de alcance"],
+            sources=[],
+            confidence=1.0,
+            tool_invocations=[],
+        )
+        record = out.model_dump()
+        upsert_analysis(record)
+        return record
+
+    if _asks_bound_experiment_metrics(query) and not experiment_id:
+        out = AnalysisOutput(
+            analysis_id=analysis_id,
+            status="insufficient_evidence",
+            answer="Evidencia insuficiente: indica experiment_id para consultar métricas del experimento.",
+            metrics=[],
+            assumptions=[],
+            warnings=["Falta experiment_id para métricas numéricas"],
+            sources=[],
+            confidence=0.1,
             tool_invocations=[],
         )
         record = out.model_dump()

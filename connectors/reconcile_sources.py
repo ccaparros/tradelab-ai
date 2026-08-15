@@ -194,6 +194,13 @@ Keep both raw immutable batches. Quarantine conflicting timestamps; do not blend
     md_path.write_text(md, encoding="utf-8")
     payload["report_uri_json"] = str(json_path)
     payload["report_uri_md"] = str(md_path)
+    try:
+        from tradelab.rag.indexer import index_file
+
+        index_file(md_path)
+        index_file(json_path)
+    except Exception:
+        pass
     return payload
 
 

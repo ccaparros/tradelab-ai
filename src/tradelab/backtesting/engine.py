@@ -53,6 +53,52 @@ def _shifted_atr(df: pd.DataFrame, period: int) -> pd.Series:
     return atr.shift(1)  # decision-time ATR must be fully known
 
 
+def _shifted_session_vwap(session_df: pd.DataFrame) -> pd.Series:
+    """Session VWAP known at decision time (shifted 1 bar)."""
+    typical = (
+        session_df["high"].astype(float)
+        + session_df["low"].astype(float)
+        + session_df["close"].astype(float)
+    ) / 3.0
+    vol = session_df["volume"].astype(float).clip(lower=1.0)
+    cum_pv = (typical * vol).cumsum()
+    cum_v = vol.cumsum()
+    vwap = cum_pv / cum_v
+    return vwap.shift(1)
+
+
+def _close_trade(
+    *,
+    session_date: str,
+    position: dict[str, Any],
+    ts: datetime,
+    exit_price: float,
+    reason: str,
+    split_label: str,
+    commission_per_side: float,
+    multiplier: float,
+    qty: int = 1,
+) -> TradeFill:
+    if position["side"] == "long":
+        pnl_gross = (exit_price - position["entry_price"]) * multiplier * qty
+    else:
+        pnl_gross = (position["entry_price"] - exit_price) * multiplier * qty
+    costs = 2 * commission_per_side
+    return TradeFill(
+        session_date=str(session_date),
+        side=position["side"],
+        entry_ts=position["entry_ts"],
+        exit_ts=ts.isoformat(),
+        entry_price=float(position["entry_price"]),
+        exit_price=float(exit_price),
+        qty=qty,
+        pnl_gross=float(pnl_gross),
+        pnl_net=float(pnl_gross - costs),
+        exit_reason=reason,
+        split_label=split_label,
+    )
+
+
 def run_orb_atr(
     df: pd.DataFrame,
     params: OrbAtrParams,

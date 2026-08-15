@@ -38,6 +38,7 @@ dev = [
 
 [project.scripts]
 tradelab-load-demo = "tradelab.datasets.load_demo:main"
+tradelab-index-rag = "tradelab.rag.indexer:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/tradelab"]

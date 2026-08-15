@@ -123,6 +123,12 @@ def publish_one(instrument: str, *, data_root: Path, reports_dir: Path) -> dict:
     side = cat_dir / f"{instrument}_{record['dataset_id'][:8]}.json"
     side.write_text(json.dumps(record, indent=2, default=str), encoding="utf-8")
     record["catalog_sidecar"] = str(side)
+    try:
+        from tradelab.rag.indexer import index_file
+
+        index_file(side)
+    except Exception:
+        pass
     return record
 
 

@@ -63,3 +63,11 @@ def test_run_backtest_and_report(client):
     report = client.get(f"/v1/experiments/{exp_id}/report")
     assert report.status_code == 200
     assert report.json()["integrity_hash"] == r1.json()["integrity_hash"]
+
+
+@pytest.mark.contract
+def test_list_strategies_includes_vwap(client):
+    r = client.get("/v1/strategies")
+    assert r.status_code == 200
+    ids = {s["strategy_id"] for s in r.json()["items"]}
+    assert {"orb_atr_intraday", "vwap_fade_intraday"} <= ids

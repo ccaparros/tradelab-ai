@@ -19,4 +19,4 @@ jobs:
       - name: Unit + contract + integration (no broker)
         run: pytest tests -q
       - name: Fast evals
-        run: pytest evals -q -m fast || true
+        run: pytest evals -q -m fast

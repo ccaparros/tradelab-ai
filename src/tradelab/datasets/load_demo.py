@@ -12,7 +12,7 @@ import pandas as pd
 from tradelab.datasets.publisher import publish_canonical_dataset
 from tradelab.datasets.store import upsert_dataset
 from tradelab.observability.settings import get_settings
-from tradelab.rag.indexer import index_markdown
+from tradelab.rag.indexer import index_markdown, reindex_reports
 
 
 def main() -> None:
@@ -52,8 +52,11 @@ def main() -> None:
     index_markdown(
         "Demo quality report",
         f"Demo dataset {record['dataset_id']} loaded with status {record['quality_status']}.",
+        source_uri="demo://quality",
+        doc_type="demo",
     )
-    print(json.dumps({"ok": True, **meta}, indent=2))
+    rag = reindex_reports()
+    print(json.dumps({"ok": True, **meta, "rag": rag}, indent=2))
 
 
 if __name__ == "__main__":

@@ -39,3 +39,35 @@ def test_backtest_orb_fixture(data_root, sample_bars_nt):
     assert exp["holdout_consumed"] is False
     assert "train" in exp["metrics_by_split"]
     assert exp["metrics_by_split"]["holdout"].get("blocked") is True
+    assert exp["strategy_id"] == "orb_atr_intraday"
+
+
+@pytest.mark.integration
+def test_backtest_vwap_fade_fixture(data_root, sample_bars_nt):
+    published = publish_canonical_dataset(sample_bars_nt, contract_id=uuid.uuid4())
+    record = {
+        "dataset_id": str(published["dataset_id"]),
+        "content_checksum": published["content_checksum"],
+        "storage_uri": published["storage_uri"],
+        "quality_status": "usable",
+        "quality": published["quality"],
+    }
+    upsert_dataset(record)
+    exp = run_experiment(
+        dataset_id=record["dataset_id"],
+        strategy_id="vwap_fade_intraday",
+        parameters={
+            "warmup_bars": 6,
+            "atr_period": 5,
+            "extension_atr": 0.4,
+            "max_extension_atr": 4.0,
+            "stop_atr_mult": 1.0,
+            "session_exit_time": "20:00",
+            "commission_per_side": 0.62,
+            "slippage_ticks": 1,
+        },
+        consume_holdout=False,
+    )
+    assert exp["strategy_id"] == "vwap_fade_intraday"
+    assert exp["integrity_hash"]
+    assert exp["metrics_by_split"]["holdout"].get("blocked") is True
