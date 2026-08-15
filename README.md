@@ -1,0 +1,46 @@
+# TradeLab AI
+
+Plataforma auditable de investigación cuantitativa y análisis de riesgo para
+futuros micro de índices (**MES/MNQ**). Investigación únicamente: **no envía
+órdenes reales**.
+
+## Requisitos
+
+- Python 3.11+
+- Docker + Docker Compose (API, UI, PostgreSQL + pgvector)
+
+## Instalación rápida (local)
+
+```bash
+python -m venv .venv
+# Windows: .\.venv\Scripts\Activate.ps1
+pip install -e ".[dev]"
+copy .env.example .env
+```
+
+## Docker Compose
+
+```bash
+docker compose up -d --build
+curl http://localhost:8000/health
+```
+
+- API: http://localhost:8000  
+- UI: http://localhost:8501  
+- Docs OpenAPI: http://localhost:8000/docs  
+
+## Validación
+
+Sigue el quickstart de la feature:
+
+- [`specs/001-tradelab-mvp/quickstart.md`](specs/001-tradelab-mvp/quickstart.md)
+
+## Spec Kit
+
+Constitución, spec, plan y tareas viven en `.specify/` y `specs/001-tradelab-mvp/`.
+
+## Aviso legal / alcance
+
+TradeLab AI es un proyecto académico de investigación. No es un bot de trading
+con dinero real. Las credenciales de broker solo se usan en conectores locales;
+la demo usa un snapshot aprobado.

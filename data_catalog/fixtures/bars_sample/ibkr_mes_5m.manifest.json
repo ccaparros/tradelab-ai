@@ -1,0 +1,11 @@
+{
+  "source": "ibkr",
+  "instrument": "MES",
+  "contract_month": "202609",
+  "bar_size": "5 mins",
+  "timezone_original": "UTC",
+  "row_count": 48,
+  "request_params": {
+    "fixture": true
+  }
+}

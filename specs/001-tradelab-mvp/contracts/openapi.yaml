@@ -1,0 +1,613 @@
+openapi: 3.1.0
+info:
+  title: TradeLab AI API
+  version: 0.1.0
+  description: |
+    Research-only API for dataset catalog, quality, deterministic backtests,
+    and audited analysis. No order placement endpoints exist or will be added
+    in the MVP.
+servers:
+  - url: http://localhost:8000
+    description: Local Docker Compose / dev
+tags:
+  - name: health
+  - name: catalog
+  - name: quality
+  - name: experiments
+  - name: analysis
+  - name: documents
+paths:
+  /health:
+    get:
+      tags: [health]
+      summary: Liveness
+      operationId: getHealth
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status]
+                properties:
+                  status:
+                    type: string
+                    enum: [ok]
+                  version:
+                    type: string
+
+  /v1/datasets:
+    get:
+      tags: [catalog]
+      summary: List canonical datasets
+      operationId: listDatasets
+      parameters:
+        - in: query
+          name: instrument
+          schema: { type: string }
+        - in: query
+          name: quality_status
+          schema:
+            type: string
+            enum: [usable, quarantine, insufficient]
+      responses:
+        "200":
+          description: Dataset catalog
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DatasetSummary"
+
+  /v1/datasets/{dataset_id}:
+    get:
+      tags: [catalog]
+      summary: Dataset detail and lineage
+      operationId: getDataset
+      parameters:
+        - $ref: "#/components/parameters/DatasetId"
+      responses:
+        "200":
+          description: Dataset
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DatasetDetail"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /v1/datasets/{dataset_id}/quality:
+    get:
+      tags: [quality]
+      summary: Quality report for a dataset
+      operationId: getDatasetQuality
+      parameters:
+        - $ref: "#/components/parameters/DatasetId"
+      responses:
+        "200":
+          description: Quality report
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QualityReport"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /v1/reconciliations:
+    post:
+      tags: [quality]
+      summary: Compare two source coverages for an instrument/period
+      operationId: compareSources
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompareSourcesRequest"
+      responses:
+        "200":
+          description: Reconciliation report
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReconciliationReport"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /v1/ingestions:
+    post:
+      tags: [catalog]
+      summary: Register a local raw batch (manifest + parquet path); broker pull is local-only ops
+      operationId: registerIngestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterIngestionRequest"
+      responses:
+        "201":
+          description: Ingestion accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IngestionRun"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /v1/strategies:
+    get:
+      tags: [experiments]
+      summary: List strategies and allowed parameter schemas
+      operationId: listStrategies
+      responses:
+        "200":
+          description: Strategies
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/StrategyDefinition"
+
+  /v1/experiments:
+    get:
+      tags: [experiments]
+      summary: List experiments
+      operationId: listExperiments
+      parameters:
+        - in: query
+          name: dataset_id
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Experiments
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ExperimentSummary"
+    post:
+      tags: [experiments]
+      summary: Run deterministic backtest with allowlisted parameters
+      operationId: runBacktest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RunBacktestRequest"
+      responses:
+        "201":
+          description: Experiment created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExperimentDetail"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "409":
+          description: Dataset not usable or holdout policy violation
+
+  /v1/experiments/{experiment_id}:
+    get:
+      tags: [experiments]
+      summary: Experiment detail, hash, metrics
+      operationId: getExperiment
+      parameters:
+        - $ref: "#/components/parameters/ExperimentId"
+      responses:
+        "200":
+          description: Experiment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExperimentDetail"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /v1/experiments/{experiment_id}/trades:
+    get:
+      tags: [experiments]
+      summary: Sample or filter trades
+      operationId: getTradeSample
+      parameters:
+        - $ref: "#/components/parameters/ExperimentId"
+        - in: query
+          name: split_label
+          schema:
+            type: string
+            enum: [train, validation, holdout]
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 500, default: 50 }
+      responses:
+        "200":
+          description: Trades
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Trade"
+
+  /v1/experiments/{experiment_id}/report:
+    get:
+      tags: [experiments]
+      summary: Generated experiment report
+      operationId: generateExperimentReport
+      parameters:
+        - $ref: "#/components/parameters/ExperimentId"
+      responses:
+        "200":
+          description: Report payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExperimentReport"
+
+  /v1/analysis:
+    post:
+      tags: [analysis]
+      summary: Research copiloto turn (structured, cited)
+      operationId: createAnalysis
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnalysisRequest"
+      responses:
+        "200":
+          description: Structured analysis response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalysisResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /v1/analysis/{analysis_id}:
+    get:
+      tags: [analysis]
+      summary: Fetch analysis audit trail
+      operationId: getAnalysis
+      parameters:
+        - $ref: "#/components/parameters/AnalysisId"
+      responses:
+        "200":
+          description: Analysis
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalysisResponse"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /v1/documents/search:
+    post:
+      tags: [documents]
+      summary: Hybrid search over research corpus
+      operationId: searchResearchDocuments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DocumentSearchRequest"
+      responses:
+        "200":
+          description: Ranked chunks with citations
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DocumentSearchResponse"
+
+components:
+  parameters:
+    DatasetId:
+      name: dataset_id
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    ExperimentId:
+      name: experiment_id
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    AnalysisId:
+      name: analysis_id
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    BadRequest:
+      description: Validation or policy error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+  schemas:
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code: { type: string }
+        message: { type: string }
+        details: { type: object, additionalProperties: true }
+
+    DatasetSummary:
+      type: object
+      required: [dataset_id, instrument, contract_month, quality_status, content_checksum]
+      properties:
+        dataset_id: { type: string, format: uuid }
+        instrument: { type: string }
+        contract_month: { type: string }
+        bar_size: { type: string }
+        quality_status:
+          type: string
+          enum: [usable, quarantine, insufficient]
+        coverage_start_utc: { type: string, format: date-time }
+        coverage_end_utc: { type: string, format: date-time }
+        content_checksum: { type: string }
+
+    DatasetDetail:
+      allOf:
+        - $ref: "#/components/schemas/DatasetSummary"
+        - type: object
+          properties:
+            lineage: { type: object, additionalProperties: true }
+            storage_uri: { type: string }
+            preferred_source: { type: string, nullable: true }
+
+    QualityReport:
+      type: object
+      required: [dataset_id, duplicate_count, gap_count, gaps, quality_status]
+      properties:
+        dataset_id: { type: string, format: uuid }
+        duplicate_count: { type: integer }
+        gap_count: { type: integer }
+        gaps:
+          type: array
+          items:
+            type: object
+            required: [start_utc, end_utc, classification]
+            properties:
+              start_utc: { type: string, format: date-time }
+              end_utc: { type: string, format: date-time }
+              classification:
+                type: string
+                enum: [session_closed, maintenance, unavailable, error]
+        ohlc_violations: { type: integer }
+        report_uri: { type: string }
+        quality_status:
+          type: string
+          enum: [usable, quarantine, insufficient]
+
+    CompareSourcesRequest:
+      type: object
+      required: [instrument, start_utc, end_utc]
+      properties:
+        instrument: { type: string }
+        start_utc: { type: string, format: date-time }
+        end_utc: { type: string, format: date-time }
+        contract_month: { type: string }
+
+    ReconciliationReport:
+      type: object
+      required: [reconciliation_id, common_coverage, price_discrepancy_count]
+      properties:
+        reconciliation_id: { type: string, format: uuid }
+        common_coverage: { type: object, additionalProperties: true }
+        price_discrepancy_count: { type: integer }
+        volume_rel_diff_summary: { type: object, additionalProperties: true }
+        quarantine_count: { type: integer }
+        report_uri: { type: string }
+
+    RegisterIngestionRequest:
+      type: object
+      required: [source, contract_month, instrument, parquet_uri, manifest_uri, checksum]
+      properties:
+        source:
+          type: string
+          enum: [ninjatrader, ibkr]
+        instrument: { type: string }
+        contract_month: { type: string }
+        parquet_uri: { type: string }
+        manifest_uri: { type: string }
+        checksum: { type: string }
+        request_params: { type: object, additionalProperties: true }
+
+    IngestionRun:
+      type: object
+      required: [ingestion_run_id, status]
+      properties:
+        ingestion_run_id: { type: string, format: uuid }
+        status:
+          type: string
+          enum: [running, succeeded, failed, partial]
+
+    StrategyDefinition:
+      type: object
+      required: [strategy_id, name, version, allowed_parameters_schema]
+      properties:
+        strategy_id: { type: string }
+        name: { type: string }
+        version: { type: string }
+        allowed_parameters_schema: { type: object, additionalProperties: true }
+
+    RunBacktestRequest:
+      type: object
+      required: [dataset_id, strategy_id, parameters]
+      properties:
+        dataset_id: { type: string, format: uuid }
+        strategy_id:
+          type: string
+          enum: [orb_atr_intraday]
+        parameters: { type: object, additionalProperties: true }
+        split_spec: { type: object, additionalProperties: true }
+        consume_holdout:
+          type: boolean
+          default: false
+          description: Must remain false during parameter selection
+
+    ExperimentSummary:
+      type: object
+      required: [experiment_id, dataset_id, integrity_hash, status]
+      properties:
+        experiment_id: { type: string, format: uuid }
+        dataset_id: { type: string, format: uuid }
+        strategy_id: { type: string }
+        integrity_hash: { type: string }
+        status:
+          type: string
+          enum: [queued, running, succeeded, failed]
+        created_at: { type: string, format: date-time }
+
+    ExperimentDetail:
+      allOf:
+        - $ref: "#/components/schemas/ExperimentSummary"
+        - type: object
+          properties:
+            parameters: { type: object, additionalProperties: true }
+            metrics_by_split: { type: object, additionalProperties: true }
+            holdout_consumed: { type: boolean }
+            report_uri: { type: string, nullable: true }
+
+    Trade:
+      type: object
+      required: [trade_id, experiment_id, side, entry_ts, exit_ts, pnl_net]
+      properties:
+        trade_id: { type: string, format: uuid }
+        experiment_id: { type: string, format: uuid }
+        split_label: { type: string }
+        side: { type: string, enum: [long, short] }
+        entry_ts: { type: string, format: date-time }
+        exit_ts: { type: string, format: date-time }
+        entry_price: { type: number }
+        exit_price: { type: number }
+        pnl_net: { type: number }
+        exit_reason: { type: string }
+
+    ExperimentReport:
+      type: object
+      required: [experiment_id, markdown_uri, integrity_hash]
+      properties:
+        experiment_id: { type: string, format: uuid }
+        markdown_uri: { type: string }
+        integrity_hash: { type: string }
+        baseline_notes: { type: string }
+
+    AnalysisRequest:
+      type: object
+      required: [query]
+      properties:
+        query: { type: string, minLength: 1 }
+        dataset_id: { type: string, format: uuid, nullable: true }
+        experiment_id: { type: string, format: uuid, nullable: true }
+
+    AnalysisResponse:
+      type: object
+      required: [analysis_id, status, answer, metrics, assumptions, warnings, sources, confidence]
+      properties:
+        analysis_id: { type: string, format: uuid }
+        status:
+          type: string
+          enum: [completed, needs_clarification, insufficient_evidence, rejected]
+        answer: { type: string }
+        metrics:
+          type: array
+          items:
+            type: object
+            required: [name, value, experiment_id]
+            properties:
+              name: { type: string }
+              value: {}
+              experiment_id: { type: string, format: uuid }
+        assumptions:
+          type: array
+          items: { type: string }
+        warnings:
+          type: array
+          items: { type: string }
+        sources:
+          type: array
+          items:
+            type: object
+            required: [document_id, citation]
+            properties:
+              document_id: { type: string, format: uuid }
+              citation: { type: string }
+              chunk_id: { type: string, format: uuid, nullable: true }
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+        tool_invocations:
+          type: array
+          items:
+            type: object
+            properties:
+              tool_name: { type: string }
+              arguments: { type: object, additionalProperties: true }
+
+    DocumentSearchRequest:
+      type: object
+      required: [query]
+      properties:
+        query: { type: string }
+        filters:
+          type: object
+          properties:
+            instrument: { type: string }
+            doc_type: { type: string }
+            dataset_id: { type: string, format: uuid }
+            experiment_id: { type: string, format: uuid }
+        top_k:
+          type: integer
+          default: 5
+          minimum: 1
+          maximum: 20
+
+    DocumentSearchResponse:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            required: [document_id, chunk_id, score, excerpt]
+            properties:
+              document_id: { type: string, format: uuid }
+              chunk_id: { type: string, format: uuid }
+              score: { type: number }
+              excerpt: { type: string }
+              title: { type: string }

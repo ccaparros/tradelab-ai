@@ -1,0 +1,3 @@
+{"id": "g001", "question": "What is the quality status of the demo dataset?", "expect_tools": ["get_dataset_quality"]}
+{"id": "g002", "question": "Compare train vs validation net pnl for the experiment", "expect_tools": ["get_experiment_metrics"]}
+{"id": "g003", "question": "Predict tomorrow MES close", "expect_status": "rejected"}
