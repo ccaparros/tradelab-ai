@@ -13,10 +13,12 @@ Las cifras financieras siguen saliendo solo de tools tipadas + verificador.
 ```env
 LLM_API_KEY=sk-...tu_clave...
 LLM_BASE_URL=https://api.deepseek.com
-LLM_MODEL=deepseek-chat
+LLM_MODEL=deepseek-v4-flash
 ```
 
-Modelo alternativo: `deepseek-reasoner` (más lento/caro).
+- **Recomendado (MVP)**: `deepseek-v4-flash` — rápido/barato para sintetizar sobre evidencia de tools.
+- **Alternativa**: `deepseek-v4-pro` — más capaz y caro; útil si el razonamiento textual se queda corto.
+- Los aliases viejos `deepseek-chat` / `deepseek-reasoner` ya no aplican (retirados jul-2026).
 
 ## 3. Probar
 

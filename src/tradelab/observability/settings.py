@@ -17,7 +17,9 @@ class Settings(BaseSettings):
     # DeepSeek (OpenAI-compatible). Override via .env
     llm_api_key: str = ""
     llm_base_url: str = "https://api.deepseek.com"
-    llm_model: str = "deepseek-chat"
+    llm_model: str = "deepseek-v4-flash"
+    # Set false behind corporate SSL interception (dev only)
+    llm_ssl_verify: bool = True
     api_host: str = "0.0.0.0"
     api_port: int = 8000
     log_level: str = "INFO"

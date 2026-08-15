@@ -21,6 +21,7 @@ def chat_completion(
     max_tokens: int = 1200,
 ) -> dict[str, Any]:
     """Call OpenAI-compatible Chat Completions API (DeepSeek, OpenAI, Azure-compatible gateways)."""
+    import httpx
     from openai import OpenAI
 
     s = get_settings()
@@ -28,17 +29,24 @@ def chat_completion(
         raise RuntimeError("LLM_API_KEY not configured")
 
     base_url = (s.llm_base_url or "https://api.deepseek.com").rstrip("/")
-    client = OpenAI(api_key=s.llm_api_key, base_url=base_url)
-    resp = client.chat.completions.create(
-        model=s.llm_model or "deepseek-chat",
-        temperature=temperature,
-        max_tokens=max_tokens,
-        messages=[
+    model = s.llm_model or "deepseek-v4-flash"
+    http_client = httpx.Client(verify=s.llm_ssl_verify, timeout=60.0)
+    client = OpenAI(api_key=s.llm_api_key, base_url=base_url, http_client=http_client)
+
+    # Disable thinking for stable JSON synthesis (metrics already come from tools).
+    create_kwargs: dict[str, Any] = {
+        "model": model,
+        "temperature": temperature,
+        "max_tokens": max_tokens,
+        "messages": [
             {"role": "system", "content": system},
             {"role": "user", "content": user},
         ],
-        response_format={"type": "json_object"},
-    )
+        "response_format": {"type": "json_object"},
+    }
+    if model.startswith("deepseek-v4"):
+        create_kwargs["extra_body"] = {"thinking": {"type": "disabled"}}
+    resp = client.chat.completions.create(**create_kwargs)
     content = resp.choices[0].message.content or "{}"
     usage = None
     if resp.usage:
@@ -50,11 +58,16 @@ def chat_completion(
     try:
         parsed = json.loads(content)
     except json.JSONDecodeError:
-        parsed = {"answer": content, "assumptions": [], "warnings": ["LLM returned non-JSON"], "confidence": 0.4}
+        parsed = {
+            "answer": content,
+            "assumptions": [],
+            "warnings": ["LLM returned non-JSON"],
+            "confidence": 0.4,
+        }
     return {
         "parsed": parsed,
         "raw": content,
-        "model": s.llm_model,
+        "model": model,
         "base_url": base_url,
         "usage": usage,
     }
