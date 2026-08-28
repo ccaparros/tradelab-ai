@@ -19,6 +19,7 @@ from tradelab.backtesting.splits import (
 )
 from tradelab.backtesting.strategies.registry import get_strategy
 from tradelab.backtesting.reporting import write_experiment_report
+from tradelab.backtesting.robustness import run_session_long_baseline, run_sensitivity, run_walk_forward
 from tradelab.datasets.store import get_dataset, upsert_experiment
 from tradelab.observability.settings import get_settings
 
@@ -68,6 +69,20 @@ def run_experiment(
     else:
         metrics_by_split["holdout"] = {"blocked": True, "trade_count": 0}
 
+    research_df = pd.concat([parts["train"], parts["validation"]], ignore_index=True)
+    walk_forward = run_walk_forward(research_df, spec, params)
+    sensitivity = run_sensitivity(parts["train"], parts["validation"], spec, params)
+    comm = float(params.model_dump().get("commission_per_side", 0.62))
+    slip = int(params.model_dump().get("slippage_ticks", 1))
+    baseline = {
+        "train": run_session_long_baseline(
+            parts["train"], commission_per_side=comm, slippage_ticks=slip
+        ),
+        "validation": run_session_long_baseline(
+            parts["validation"], commission_per_side=comm, slippage_ticks=slip
+        ),
+    }
+
     integrity = experiment_integrity_hash(
         dataset_checksum=dataset["content_checksum"],
         code_version=f"{settings.code_version}:{spec.version}",
@@ -87,6 +102,9 @@ def run_experiment(
         "status": "succeeded",
         "holdout_consumed": holdout_consumed,
         "metrics_by_split": metrics_by_split,
+        "walk_forward": walk_forward,
+        "sensitivity": sensitivity,
+        "baseline": baseline,
         "trades": [t.__dict__ for t in trades_all],
         "report_uri": None,
     }

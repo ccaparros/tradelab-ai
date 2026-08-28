@@ -107,7 +107,13 @@ def generate_experiment_report(experiment_id: str) -> dict[str, Any]:
         "experiment_id": experiment_id,
         "markdown_uri": exp.get("report_uri") or f"memory://experiments/{experiment_id}",
         "integrity_hash": exp["integrity_hash"],
-        "baseline_notes": "ORB+ATR vs idle session baseline omitted in stub report",
+        "baseline_notes": (
+            "Includes session-long baseline, expanding walk-forward on train+validation, "
+            "and cost/nearby-parameter sensitivity. Holdout is never used for these checks."
+        ),
+        "walk_forward": exp.get("walk_forward"),
+        "sensitivity": exp.get("sensitivity"),
+        "baseline": exp.get("baseline"),
     }
 
 

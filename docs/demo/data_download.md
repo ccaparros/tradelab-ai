@@ -2,7 +2,11 @@
 
 ## IBKR (automático) ✅
 
-TWS detectado en `127.0.0.1:7497`.
+El script detecta el socket: **7497** (paper TWS), **7496** (live TWS), **4002/4001** (Gateway).
+La descarga es **solo lectura** (`readonly=True`); no envía órdenes.
+
+`ContFuture` no permite paginar (`endDateTime`). El cliente pide cada vencimiento
+trimestral (`includeExpired`) y cose una serie nearest-expiry.
 
 ### Ajustes en TWS (una vez)
 
@@ -20,10 +24,12 @@ python -m connectors.ibkr.download_history --symbol MES --days 5
 python -m connectors.ibkr.download_history --symbol MNQ --days 5 --client-id 72
 ```
 
-Más historia (si tu suscripción lo permite):
+Histórico largo (12–24 meses, paginado; depende de los contratos que IBKR aún sirva):
 
 ```powershell
-python -m connectors.ibkr.download_history --symbol MES --days 60 --client-id 73
+python -m connectors.ibkr.download_history --symbol MES --days 730 --client-id 101
+python -m connectors.ibkr.download_history --symbol MNQ --days 730 --client-id 102
+python -m connectors.publish_canonical --all
 ```
 
 Salida: `data/raw/ibkr/<run_id>/` (Parquet + `manifest.json`).

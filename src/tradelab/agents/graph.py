@@ -5,7 +5,10 @@ from __future__ import annotations
 import json
 import uuid
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
+
+from langgraph.checkpoint.memory import MemorySaver
+from langgraph.graph import END, START, StateGraph
 
 from tradelab.agents.llm import chat_completion, llm_configured
 from tradelab.agents.schema import AnalysisOutput, MetricRef, SourceRef, verify_analysis
@@ -17,6 +20,7 @@ from tradelab.agents.tools import (
 )
 from tradelab.datasets.store import upsert_analysis
 from tradelab.observability.settings import get_settings
+from tradelab.observability.tracing import span_fields
 
 
 def _is_prediction_request(query: str) -> bool:
@@ -178,14 +182,28 @@ def _fallback_answer(pack: dict[str, Any], metrics: list[MetricRef]) -> str:
     return " ".join(parts) if parts else "Evidencia insuficiente."
 
 
-def run_analysis(
-    *,
-    query: str,
-    dataset_id: str | None = None,
-    experiment_id: str | None = None,
-) -> dict[str, Any]:
-    get_settings.cache_clear()
-    analysis_id = str(uuid.uuid4())
+class AgentState(TypedDict, total=False):
+    query: str
+    dataset_id: str | None
+    experiment_id: str | None
+    analysis_id: str
+    record: dict[str, Any]
+    done: bool
+    graph: str
+
+
+def _persist(out: AnalysisOutput, extra: dict[str, Any] | None = None) -> dict[str, Any]:
+    record = out.model_dump()
+    if extra:
+        record.update(extra)
+    upsert_analysis(record)
+    return record
+
+
+def _node_guards(state: AgentState) -> AgentState:
+    query = state["query"]
+    analysis_id = state["analysis_id"]
+    experiment_id = state.get("experiment_id")
 
     if _is_prediction_request(query):
         out = AnalysisOutput(
@@ -199,9 +217,8 @@ def run_analysis(
             confidence=1.0,
             tool_invocations=[],
         )
-        record = out.model_dump()
-        upsert_analysis(record)
-        return record
+        rec = _persist(out, {"llm": {"provider": "guard"}, "graph": "langgraph"})
+        return {**state, "record": rec, "done": True, "graph": "langgraph"}
 
     if _is_live_trading_request(query):
         out = AnalysisOutput(
@@ -218,9 +235,8 @@ def run_analysis(
             confidence=1.0,
             tool_invocations=[],
         )
-        record = out.model_dump()
-        upsert_analysis(record)
-        return record
+        rec = _persist(out, {"llm": {"provider": "guard"}, "graph": "langgraph"})
+        return {**state, "record": rec, "done": True, "graph": "langgraph"}
 
     if _asks_bound_experiment_metrics(query) and not experiment_id:
         out = AnalysisOutput(
@@ -234,9 +250,17 @@ def run_analysis(
             confidence=0.1,
             tool_invocations=[],
         )
-        record = out.model_dump()
-        upsert_analysis(record)
-        return record
+        rec = _persist(out, {"llm": {"provider": "guard"}, "graph": "langgraph"})
+        return {**state, "record": rec, "done": True, "graph": "langgraph"}
+
+    return {**state, "done": False, "graph": "langgraph"}
+
+
+def _node_research(state: AgentState) -> AgentState:
+    query = state["query"]
+    analysis_id = state["analysis_id"]
+    dataset_id = state.get("dataset_id")
+    experiment_id = state.get("experiment_id")
 
     invocations, metrics, sources, known_metrics, known_docs, pack = _collect_evidence(
         query=query, dataset_id=dataset_id, experiment_id=experiment_id
@@ -254,9 +278,8 @@ def run_analysis(
             confidence=0.1,
             tool_invocations=invocations,
         )
-        record = out.model_dump()
-        upsert_analysis(record)
-        return record
+        rec = _persist(out, {"llm": {"provider": "stub"}, "graph": "langgraph"})
+        return {**state, "record": rec, "done": True}
 
     llm_meta: dict[str, Any] = {"provider": "stub"}
     assumptions = ["Las métricas provienen exclusivamente de tools tipadas"]
@@ -290,6 +313,11 @@ def run_analysis(
                 "base_url": result.get("base_url"),
                 "usage": result.get("usage"),
             }
+            llm_meta["trace"] = span_fields(
+                analysis_id=analysis_id,
+                experiment_id=experiment_id,
+                token_usage=result.get("usage"),
+            )
         except Exception as exc:  # noqa: BLE001
             warnings.append(f"LLM unavailable, using deterministic fallback: {exc}")
             llm_meta = {"provider": "fallback", "error": str(exc)}
@@ -310,7 +338,47 @@ def run_analysis(
     verified = verify_analysis(out, known_metric_values=known_metrics, known_document_ids=known_docs or {"none"})
     if not sources:
         verified = out
-    record = verified.model_dump()
-    record["llm"] = llm_meta
-    upsert_analysis(record)
-    return record
+    record = _persist(verified, {"llm": llm_meta, "graph": "langgraph"})
+    return {**state, "record": record, "done": True}
+
+
+def _route_after_guards(state: AgentState) -> str:
+    return "end" if state.get("done") else "research"
+
+
+def _compile_graph():
+    builder = StateGraph(AgentState)
+    builder.add_node("guards", _node_guards)
+    builder.add_node("research", _node_research)
+    builder.add_edge(START, "guards")
+    builder.add_conditional_edges(
+        "guards",
+        _route_after_guards,
+        {"end": END, "research": "research"},
+    )
+    builder.add_edge("research", END)
+    return builder.compile(checkpointer=MemorySaver())
+
+
+_ANALYSIS_GRAPH = _compile_graph()
+
+
+def run_analysis(
+    *,
+    query: str,
+    dataset_id: str | None = None,
+    experiment_id: str | None = None,
+) -> dict[str, Any]:
+    get_settings.cache_clear()
+    analysis_id = str(uuid.uuid4())
+    result = _ANALYSIS_GRAPH.invoke(
+        {
+            "query": query,
+            "dataset_id": dataset_id,
+            "experiment_id": experiment_id,
+            "analysis_id": analysis_id,
+            "done": False,
+        },
+        config={"configurable": {"thread_id": analysis_id}},
+    )
+    return result["record"]

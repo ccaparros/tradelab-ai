@@ -112,7 +112,7 @@ if st.button("Ejecutar backtest", type="primary"):
             "parameters": params,
             "consume_holdout": consume_holdout,
         },
-        timeout=120,
+        timeout=180,
     )
     if r.status_code >= 400:
         st.error(r.text)
@@ -134,5 +134,60 @@ if st.button("Ejecutar backtest", type="primary"):
                 else:
                     st.metric("net PnL", f"{blob.get('net_pnl', '—')}")
                     st.caption(f"trades={blob.get('trade_count', '—')} · DD={blob.get('max_drawdown', '—')}")
-        with st.expander("JSON métricas"):
-            st.json(by)
+        wf = body.get("walk_forward") or {}
+        st.subheader("Walk-forward (sin holdout)")
+        if wf.get("status") != "ok":
+            st.caption(f"No aplicable: {wf.get('reason') or wf.get('status')}. Hace falta más de una sesión.")
+        else:
+            st.caption(
+                f"Esquema expanding · {wf.get('n_folds')} folds · "
+                f"OOS net PnL suma `{wf.get('oos_net_pnl_sum')}`"
+            )
+            fold_rows = []
+            for f in wf.get("folds") or []:
+                fold_rows.append(
+                    {
+                        "fold": f.get("fold"),
+                        "train": f"{f.get('train_start')} → {f.get('train_end')}",
+                        "test": f"{f.get('test_start')} → {f.get('test_end')}",
+                        "IS pnl": (f.get("is") or {}).get("net_pnl"),
+                        "OOS pnl": (f.get("oos") or {}).get("net_pnl"),
+                        "OOS trades": (f.get("oos") or {}).get("trade_count"),
+                    }
+                )
+            st.dataframe(fold_rows, use_container_width=True, hide_index=True)
+        base = body.get("baseline") or {}
+        st.subheader("Baseline (largo de sesión)")
+        bcols = st.columns(2)
+        for i, split in enumerate(("train", "validation")):
+            blob = base.get(split) or {}
+            with bcols[i]:
+                st.metric(f"{split} net PnL", f"{blob.get('net_pnl', '—')}")
+                st.caption(f"trades={blob.get('trade_count', '—')}")
+        sens = body.get("sensitivity") or {}
+        st.subheader("Sensibilidad a costes y parámetros cercanos")
+        st.caption("Solo train/validation. El holdout no entra en estas pruebas.")
+        srows = []
+        for v in sens.get("variants") or []:
+            srows.append(
+                {
+                    "variante": v.get("label"),
+                    "tipo": v.get("kind"),
+                    "train PnL": (v.get("train") or {}).get("net_pnl"),
+                    "val PnL": (v.get("validation") or {}).get("net_pnl"),
+                    "val trades": (v.get("validation") or {}).get("trade_count"),
+                }
+            )
+        if srows:
+            st.dataframe(srows, use_container_width=True, hide_index=True)
+        else:
+            st.caption("Sin variantes (dataset demasiado corto o parámetros inválidos).")
+        with st.expander("JSON métricas / robustez"):
+            st.json(
+                {
+                    "metrics_by_split": by,
+                    "walk_forward": wf,
+                    "sensitivity": sens,
+                    "baseline": base,
+                }
+            )

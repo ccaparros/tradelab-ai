@@ -53,6 +53,18 @@ POLICY_DOCS: list[dict[str, str]] = [
             "costs, or overfit. Compare net_pnl and drawdown by split with citations."
         ),
     },
+    {
+        "document_id": "00000000-0000-0000-0000-000000000005",
+        "title": "Walk-forward and sensitivity policy",
+        "doc_type": "policy",
+        "content": (
+            "Walk-forward is expanding on train+validation only. "
+            "Sensitivity covers nearby parameters and cost shocks (commission, slippage). "
+            "Holdout is excluded from walk-forward, sensitivity, and baseline. "
+            "A session-long naive baseline is reported for comparison. "
+            "Profitability is not a project success criterion."
+        ),
+    },
 ]
 
 

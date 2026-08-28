@@ -40,6 +40,11 @@ def test_backtest_orb_fixture(data_root, sample_bars_nt):
     assert "train" in exp["metrics_by_split"]
     assert exp["metrics_by_split"]["holdout"].get("blocked") is True
     assert exp["strategy_id"] == "orb_atr_intraday"
+    assert "walk_forward" in exp
+    assert "sensitivity" in exp
+    assert "baseline" in exp
+    assert exp["walk_forward"].get("status") in {"ok", "skipped"}
+    assert exp["sensitivity"].get("status") in {"ok", "skipped"}
 
 
 @pytest.mark.integration

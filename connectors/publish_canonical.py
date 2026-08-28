@@ -63,7 +63,17 @@ def publish_one(instrument: str, *, data_root: Path, reports_dir: Path) -> dict:
     df["timestamp_utc"] = pd.to_datetime(df["timestamp_utc"], utc=True)
     df = df.sort_values("timestamp_utc").drop_duplicates(subset=["timestamp_utc"], keep="last")
 
-    contract_month = str(df["contract_month"].iloc[0]) if "contract_month" in df.columns else "202609"
+    ibkr_manifest: dict = {}
+    man_path = ibkr_path.parent / "manifest.json"
+    if man_path.exists():
+        ibkr_manifest = json.loads(man_path.read_text(encoding="utf-8"))
+
+    months = (
+        sorted(df["contract_month"].astype(str).unique().tolist())
+        if "contract_month" in df.columns
+        else []
+    )
+    contract_month = f"stitch:{months[0]}-{months[-1]}" if months else "202609"
     published = publish_canonical_dataset(
         df,
         contract_id=uuid.uuid4(),
@@ -77,6 +87,11 @@ def publish_one(instrument: str, *, data_root: Path, reports_dir: Path) -> dict:
             "reconciliation_report_json": recon["json"],
             "bar_size": "5 mins",
             "useRTH": True,
+            "ibkr_stitch": ibkr_manifest.get("request_params", {}).get("stitch", "nearest_expiry"),
+            "ibkr_contracts": ibkr_manifest.get("request_params", {}).get("contracts"),
+            "contract_months": months,
+            "ibkr_row_count": ibkr_manifest.get("row_count"),
+            "coverage_calendar_days": ibkr_manifest.get("coverage_calendar_days"),
             "published_at_utc": datetime.now(timezone.utc).isoformat(),
         },
     )

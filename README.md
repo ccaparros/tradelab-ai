@@ -47,6 +47,11 @@ Detalle: [`docs/demo/rag_setup.md`](docs/demo/rag_setup.md)
 
 Constitución, spec, plan y tareas viven en `.specify/` y `specs/001-tradelab-mvp/`.
 
+Contraste propuesta vs implementación (qué se pidió y qué hay):
+
+- [`docs/demo/README_evaluador.md`](docs/demo/README_evaluador.md) — recorrido único sin broker
+- [`docs/demo/cobertura_requisitos.md`](docs/demo/cobertura_requisitos.md)
+
 ## Aviso legal / alcance
 
 TradeLab AI es un proyecto académico de investigación. No es un bot de trading
