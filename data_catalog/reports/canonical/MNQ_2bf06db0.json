@@ -1,0 +1,2149 @@
+{
+  "dataset_id": "2bf06db0-982a-4a72-9bc6-1954c3bd0a1f",
+  "contract_id": "c63478f6-1d9f-4f80-9231-b2cad317eba4",
+  "instrument": "MNQ",
+  "contract_month": "stitch:202512-202609",
+  "bar_size": "5 mins",
+  "quality_status": "usable",
+  "content_checksum": "ce4a04f14dfd3c2f14ac0ac2df289524e15ac7f3b3989a3b8a4542c3c8fa4c11",
+  "storage_uri": "data\\canonical\\2bf06db0-982a-4a72-9bc6-1954c3bd0a1f\\bars.parquet",
+  "coverage_start_utc": "2024-10-09 16:05:00+00:00",
+  "coverage_end_utc": "2026-08-28 13:45:00+00:00",
+  "quality": {
+    "duplicate_count": 0,
+    "gap_count": 416,
+    "gaps": [
+      {
+        "start_utc": "2024-10-09T20:55:00+00:00",
+        "end_utc": "2024-10-11T20:50:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2024-10-11T20:55:00+00:00",
+        "end_utc": "2024-10-14T14:15:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2024-10-14T20:55:00+00:00",
+        "end_utc": "2024-10-17T14:10:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2024-10-17T20:55:00+00:00",
+        "end_utc": "2024-10-18T20:40:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2024-10-18T20:55:00+00:00",
+        "end_utc": "2024-10-25T16:45:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2024-10-25T20:55:00+00:00",
+        "end_utc": "2024-10-29T15:50:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2024-10-29T20:55:00+00:00",
+        "end_utc": "2024-11-07T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2024-11-07T21:55:00+00:00",
+        "end_utc": "2024-11-11T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2024-11-11T21:55:00+00:00",
+        "end_utc": "2024-11-13T21:55:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2024-11-13T21:55:00+00:00",
+        "end_utc": "2024-11-14T17:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2024-11-14T21:55:00+00:00",
+        "end_utc": "2024-11-25T17:20:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2024-11-25T21:55:00+00:00",
+        "end_utc": "2024-11-27T15:40:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2024-11-27T21:55:00+00:00",
+        "end_utc": "2024-12-02T21:05:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2024-12-02T21:55:00+00:00",
+        "end_utc": "2024-12-18T15:20:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2024-12-18T21:55:00+00:00",
+        "end_utc": "2024-12-20T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2024-12-20T21:55:00+00:00",
+        "end_utc": "2024-12-30T18:25:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2024-12-30T21:55:00+00:00",
+        "end_utc": "2025-01-08T17:25:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-01-08T21:55:00+00:00",
+        "end_utc": "2025-01-10T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-01-10T21:55:00+00:00",
+        "end_utc": "2025-01-13T17:00:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-01-13T21:55:00+00:00",
+        "end_utc": "2025-01-14T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-01-14T21:55:00+00:00",
+        "end_utc": "2025-01-15T14:45:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-01-15T21:55:00+00:00",
+        "end_utc": "2025-01-16T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-01-16T21:55:00+00:00",
+        "end_utc": "2025-01-17T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-01-17T21:55:00+00:00",
+        "end_utc": "2025-01-22T14:55:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-01-22T21:55:00+00:00",
+        "end_utc": "2025-01-27T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-01-27T21:55:00+00:00",
+        "end_utc": "2025-01-28T21:55:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-01-28T21:55:00+00:00",
+        "end_utc": "2025-01-30T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-01-30T21:55:00+00:00",
+        "end_utc": "2025-01-31T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-01-31T21:55:00+00:00",
+        "end_utc": "2025-02-10T15:10:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-02-10T21:55:00+00:00",
+        "end_utc": "2025-02-12T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-02-12T21:55:00+00:00",
+        "end_utc": "2025-02-13T20:55:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-02-13T21:55:00+00:00",
+        "end_utc": "2025-02-14T20:35:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-02-14T21:55:00+00:00",
+        "end_utc": "2025-02-18T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-02-18T21:55:00+00:00",
+        "end_utc": "2025-02-19T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-02-19T21:55:00+00:00",
+        "end_utc": "2025-02-20T15:45:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-02-20T21:55:00+00:00",
+        "end_utc": "2025-02-21T18:55:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-02-21T21:55:00+00:00",
+        "end_utc": "2025-02-24T15:05:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-02-24T21:55:00+00:00",
+        "end_utc": "2025-02-25T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-02-25T21:55:00+00:00",
+        "end_utc": "2025-02-26T15:45:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-02-26T21:55:00+00:00",
+        "end_utc": "2025-02-27T21:50:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-02-27T21:55:00+00:00",
+        "end_utc": "2025-02-28T15:35:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-02-28T21:55:00+00:00",
+        "end_utc": "2025-03-03T14:45:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-03T21:55:00+00:00",
+        "end_utc": "2025-03-04T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-04T21:55:00+00:00",
+        "end_utc": "2025-03-06T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-06T21:55:00+00:00",
+        "end_utc": "2025-03-07T15:45:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-07T21:55:00+00:00",
+        "end_utc": "2025-03-10T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-10T20:55:00+00:00",
+        "end_utc": "2025-03-11T14:15:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-11T20:55:00+00:00",
+        "end_utc": "2025-03-12T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-12T20:55:00+00:00",
+        "end_utc": "2025-03-13T14:10:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-13T20:55:00+00:00",
+        "end_utc": "2025-03-14T20:55:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-14T20:55:00+00:00",
+        "end_utc": "2025-03-17T13:35:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-17T20:55:00+00:00",
+        "end_utc": "2025-03-19T17:05:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-19T20:55:00+00:00",
+        "end_utc": "2025-03-20T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-20T20:55:00+00:00",
+        "end_utc": "2025-03-21T17:05:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-21T20:55:00+00:00",
+        "end_utc": "2025-03-24T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-24T20:55:00+00:00",
+        "end_utc": "2025-03-25T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-25T20:55:00+00:00",
+        "end_utc": "2025-03-26T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-26T20:55:00+00:00",
+        "end_utc": "2025-03-27T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-27T20:55:00+00:00",
+        "end_utc": "2025-03-28T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-28T20:55:00+00:00",
+        "end_utc": "2025-03-31T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-03-31T20:55:00+00:00",
+        "end_utc": "2025-04-01T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-01T20:55:00+00:00",
+        "end_utc": "2025-04-02T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-02T20:55:00+00:00",
+        "end_utc": "2025-04-03T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-03T20:55:00+00:00",
+        "end_utc": "2025-04-04T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-04T20:55:00+00:00",
+        "end_utc": "2025-04-07T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-07T20:55:00+00:00",
+        "end_utc": "2025-04-08T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-08T20:55:00+00:00",
+        "end_utc": "2025-04-09T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-09T20:55:00+00:00",
+        "end_utc": "2025-04-10T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-10T20:55:00+00:00",
+        "end_utc": "2025-04-11T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-11T20:55:00+00:00",
+        "end_utc": "2025-04-14T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-14T20:55:00+00:00",
+        "end_utc": "2025-04-15T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-15T20:55:00+00:00",
+        "end_utc": "2025-04-16T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-16T20:55:00+00:00",
+        "end_utc": "2025-04-17T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-17T20:55:00+00:00",
+        "end_utc": "2025-04-21T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-21T20:55:00+00:00",
+        "end_utc": "2025-04-22T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-22T20:55:00+00:00",
+        "end_utc": "2025-04-23T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-23T20:55:00+00:00",
+        "end_utc": "2025-04-24T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-24T20:55:00+00:00",
+        "end_utc": "2025-04-25T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-25T20:55:00+00:00",
+        "end_utc": "2025-04-28T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-28T20:55:00+00:00",
+        "end_utc": "2025-04-29T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-29T20:55:00+00:00",
+        "end_utc": "2025-04-30T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-04-30T20:55:00+00:00",
+        "end_utc": "2025-05-01T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-01T20:55:00+00:00",
+        "end_utc": "2025-05-02T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-02T20:55:00+00:00",
+        "end_utc": "2025-05-05T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-05T20:55:00+00:00",
+        "end_utc": "2025-05-06T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-06T20:55:00+00:00",
+        "end_utc": "2025-05-07T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-07T20:55:00+00:00",
+        "end_utc": "2025-05-08T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-08T20:55:00+00:00",
+        "end_utc": "2025-05-09T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-09T20:55:00+00:00",
+        "end_utc": "2025-05-12T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-12T20:55:00+00:00",
+        "end_utc": "2025-05-13T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-13T20:55:00+00:00",
+        "end_utc": "2025-05-14T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-14T20:55:00+00:00",
+        "end_utc": "2025-05-15T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-15T20:55:00+00:00",
+        "end_utc": "2025-05-16T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-16T20:55:00+00:00",
+        "end_utc": "2025-05-19T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-19T20:55:00+00:00",
+        "end_utc": "2025-05-20T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-20T20:55:00+00:00",
+        "end_utc": "2025-05-21T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-21T20:55:00+00:00",
+        "end_utc": "2025-05-22T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-22T20:55:00+00:00",
+        "end_utc": "2025-05-23T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-23T20:55:00+00:00",
+        "end_utc": "2025-05-27T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-27T20:55:00+00:00",
+        "end_utc": "2025-05-28T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-28T20:55:00+00:00",
+        "end_utc": "2025-05-29T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-29T20:55:00+00:00",
+        "end_utc": "2025-05-30T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-05-30T20:55:00+00:00",
+        "end_utc": "2025-06-02T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-02T20:55:00+00:00",
+        "end_utc": "2025-06-03T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-03T20:55:00+00:00",
+        "end_utc": "2025-06-04T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-04T20:55:00+00:00",
+        "end_utc": "2025-06-05T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-05T20:55:00+00:00",
+        "end_utc": "2025-06-06T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-06T20:55:00+00:00",
+        "end_utc": "2025-06-09T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-09T20:55:00+00:00",
+        "end_utc": "2025-06-10T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-10T20:55:00+00:00",
+        "end_utc": "2025-06-11T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-11T20:55:00+00:00",
+        "end_utc": "2025-06-12T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-12T20:55:00+00:00",
+        "end_utc": "2025-06-13T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-13T20:55:00+00:00",
+        "end_utc": "2025-06-16T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-16T20:55:00+00:00",
+        "end_utc": "2025-06-17T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-17T20:55:00+00:00",
+        "end_utc": "2025-06-18T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-18T20:55:00+00:00",
+        "end_utc": "2025-06-20T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-20T20:55:00+00:00",
+        "end_utc": "2025-06-23T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-23T20:55:00+00:00",
+        "end_utc": "2025-06-24T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-24T20:55:00+00:00",
+        "end_utc": "2025-06-25T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-25T20:55:00+00:00",
+        "end_utc": "2025-06-26T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-26T20:55:00+00:00",
+        "end_utc": "2025-06-27T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-27T20:55:00+00:00",
+        "end_utc": "2025-06-30T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-06-30T20:55:00+00:00",
+        "end_utc": "2025-07-01T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-01T20:55:00+00:00",
+        "end_utc": "2025-07-02T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-02T20:55:00+00:00",
+        "end_utc": "2025-07-03T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-03T17:10:00+00:00",
+        "end_utc": "2025-07-07T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-07T20:55:00+00:00",
+        "end_utc": "2025-07-08T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-08T20:55:00+00:00",
+        "end_utc": "2025-07-09T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-09T20:55:00+00:00",
+        "end_utc": "2025-07-10T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-10T20:55:00+00:00",
+        "end_utc": "2025-07-11T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-11T20:55:00+00:00",
+        "end_utc": "2025-07-14T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-14T20:55:00+00:00",
+        "end_utc": "2025-07-15T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-15T20:55:00+00:00",
+        "end_utc": "2025-07-16T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-16T20:55:00+00:00",
+        "end_utc": "2025-07-17T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-17T20:55:00+00:00",
+        "end_utc": "2025-07-18T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-18T20:55:00+00:00",
+        "end_utc": "2025-07-21T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-21T20:55:00+00:00",
+        "end_utc": "2025-07-22T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-22T20:55:00+00:00",
+        "end_utc": "2025-07-23T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-23T20:55:00+00:00",
+        "end_utc": "2025-07-24T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-24T20:55:00+00:00",
+        "end_utc": "2025-07-25T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-25T20:55:00+00:00",
+        "end_utc": "2025-07-28T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-28T20:55:00+00:00",
+        "end_utc": "2025-07-29T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-29T20:55:00+00:00",
+        "end_utc": "2025-07-30T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-30T20:55:00+00:00",
+        "end_utc": "2025-07-31T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-07-31T20:55:00+00:00",
+        "end_utc": "2025-08-01T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-01T20:55:00+00:00",
+        "end_utc": "2025-08-04T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-04T20:55:00+00:00",
+        "end_utc": "2025-08-05T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-05T20:55:00+00:00",
+        "end_utc": "2025-08-06T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-06T20:55:00+00:00",
+        "end_utc": "2025-08-07T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-07T20:55:00+00:00",
+        "end_utc": "2025-08-08T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-08T20:55:00+00:00",
+        "end_utc": "2025-08-11T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-11T20:55:00+00:00",
+        "end_utc": "2025-08-12T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-12T20:55:00+00:00",
+        "end_utc": "2025-08-13T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-13T20:55:00+00:00",
+        "end_utc": "2025-08-14T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-14T20:55:00+00:00",
+        "end_utc": "2025-08-15T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-15T20:55:00+00:00",
+        "end_utc": "2025-08-18T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-18T20:55:00+00:00",
+        "end_utc": "2025-08-19T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-19T20:55:00+00:00",
+        "end_utc": "2025-08-20T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-20T20:55:00+00:00",
+        "end_utc": "2025-08-21T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-21T20:55:00+00:00",
+        "end_utc": "2025-08-22T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-22T20:55:00+00:00",
+        "end_utc": "2025-08-25T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-25T20:55:00+00:00",
+        "end_utc": "2025-08-26T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-26T20:55:00+00:00",
+        "end_utc": "2025-08-27T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-27T20:55:00+00:00",
+        "end_utc": "2025-08-28T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-28T20:55:00+00:00",
+        "end_utc": "2025-08-29T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-08-29T20:55:00+00:00",
+        "end_utc": "2025-09-02T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-02T20:55:00+00:00",
+        "end_utc": "2025-09-03T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-03T20:55:00+00:00",
+        "end_utc": "2025-09-04T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-04T20:55:00+00:00",
+        "end_utc": "2025-09-05T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-05T20:55:00+00:00",
+        "end_utc": "2025-09-08T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-08T20:55:00+00:00",
+        "end_utc": "2025-09-09T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-09T20:55:00+00:00",
+        "end_utc": "2025-09-10T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-10T20:55:00+00:00",
+        "end_utc": "2025-09-11T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-11T20:55:00+00:00",
+        "end_utc": "2025-09-12T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-12T20:55:00+00:00",
+        "end_utc": "2025-09-15T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-15T20:55:00+00:00",
+        "end_utc": "2025-09-16T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-16T20:55:00+00:00",
+        "end_utc": "2025-09-17T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-17T20:55:00+00:00",
+        "end_utc": "2025-09-18T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-18T20:55:00+00:00",
+        "end_utc": "2025-09-19T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-19T20:55:00+00:00",
+        "end_utc": "2025-09-22T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-22T20:55:00+00:00",
+        "end_utc": "2025-09-23T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-23T20:55:00+00:00",
+        "end_utc": "2025-09-24T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-24T20:55:00+00:00",
+        "end_utc": "2025-09-25T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-25T20:55:00+00:00",
+        "end_utc": "2025-09-26T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-26T20:55:00+00:00",
+        "end_utc": "2025-09-29T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-29T20:55:00+00:00",
+        "end_utc": "2025-09-30T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-09-30T20:55:00+00:00",
+        "end_utc": "2025-10-01T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-01T20:55:00+00:00",
+        "end_utc": "2025-10-02T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-02T20:55:00+00:00",
+        "end_utc": "2025-10-03T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-03T20:55:00+00:00",
+        "end_utc": "2025-10-06T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-06T20:55:00+00:00",
+        "end_utc": "2025-10-07T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-07T20:55:00+00:00",
+        "end_utc": "2025-10-08T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-08T20:55:00+00:00",
+        "end_utc": "2025-10-09T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-09T20:55:00+00:00",
+        "end_utc": "2025-10-10T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-10T20:55:00+00:00",
+        "end_utc": "2025-10-13T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-13T20:55:00+00:00",
+        "end_utc": "2025-10-14T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-14T20:55:00+00:00",
+        "end_utc": "2025-10-15T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-15T20:55:00+00:00",
+        "end_utc": "2025-10-16T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-16T20:55:00+00:00",
+        "end_utc": "2025-10-17T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-17T20:55:00+00:00",
+        "end_utc": "2025-10-20T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-20T20:55:00+00:00",
+        "end_utc": "2025-10-21T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-21T20:55:00+00:00",
+        "end_utc": "2025-10-22T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-22T20:55:00+00:00",
+        "end_utc": "2025-10-23T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-23T20:55:00+00:00",
+        "end_utc": "2025-10-24T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-24T20:55:00+00:00",
+        "end_utc": "2025-10-27T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-27T20:55:00+00:00",
+        "end_utc": "2025-10-28T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-28T20:55:00+00:00",
+        "end_utc": "2025-10-29T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-29T20:55:00+00:00",
+        "end_utc": "2025-10-30T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-30T20:55:00+00:00",
+        "end_utc": "2025-10-31T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-10-31T20:55:00+00:00",
+        "end_utc": "2025-11-03T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-03T21:55:00+00:00",
+        "end_utc": "2025-11-04T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-04T21:55:00+00:00",
+        "end_utc": "2025-11-05T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-05T21:55:00+00:00",
+        "end_utc": "2025-11-06T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-06T21:55:00+00:00",
+        "end_utc": "2025-11-07T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-07T21:55:00+00:00",
+        "end_utc": "2025-11-10T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-10T21:55:00+00:00",
+        "end_utc": "2025-11-11T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-11T21:55:00+00:00",
+        "end_utc": "2025-11-12T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-12T21:55:00+00:00",
+        "end_utc": "2025-11-13T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-13T21:55:00+00:00",
+        "end_utc": "2025-11-14T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-14T21:55:00+00:00",
+        "end_utc": "2025-11-17T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-17T21:55:00+00:00",
+        "end_utc": "2025-11-18T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-18T21:55:00+00:00",
+        "end_utc": "2025-11-19T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-19T21:55:00+00:00",
+        "end_utc": "2025-11-20T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-20T21:55:00+00:00",
+        "end_utc": "2025-11-21T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-21T21:55:00+00:00",
+        "end_utc": "2025-11-24T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-24T21:55:00+00:00",
+        "end_utc": "2025-11-25T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-25T21:55:00+00:00",
+        "end_utc": "2025-11-26T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-26T21:55:00+00:00",
+        "end_utc": "2025-11-28T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-11-28T18:10:00+00:00",
+        "end_utc": "2025-12-01T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-01T21:55:00+00:00",
+        "end_utc": "2025-12-02T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-02T21:55:00+00:00",
+        "end_utc": "2025-12-03T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-03T21:55:00+00:00",
+        "end_utc": "2025-12-04T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-04T21:55:00+00:00",
+        "end_utc": "2025-12-05T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-05T21:55:00+00:00",
+        "end_utc": "2025-12-08T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-08T21:55:00+00:00",
+        "end_utc": "2025-12-09T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-09T21:55:00+00:00",
+        "end_utc": "2025-12-10T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-10T21:55:00+00:00",
+        "end_utc": "2025-12-11T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-11T21:55:00+00:00",
+        "end_utc": "2025-12-12T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-12T21:55:00+00:00",
+        "end_utc": "2025-12-15T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-15T21:55:00+00:00",
+        "end_utc": "2025-12-16T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-16T21:55:00+00:00",
+        "end_utc": "2025-12-17T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-17T21:55:00+00:00",
+        "end_utc": "2025-12-18T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-18T21:55:00+00:00",
+        "end_utc": "2025-12-19T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-19T21:55:00+00:00",
+        "end_utc": "2025-12-22T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-22T21:55:00+00:00",
+        "end_utc": "2025-12-23T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-23T21:55:00+00:00",
+        "end_utc": "2025-12-24T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-24T18:10:00+00:00",
+        "end_utc": "2025-12-26T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-26T21:55:00+00:00",
+        "end_utc": "2025-12-29T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-29T21:55:00+00:00",
+        "end_utc": "2025-12-30T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-30T21:55:00+00:00",
+        "end_utc": "2025-12-31T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2025-12-31T21:55:00+00:00",
+        "end_utc": "2026-01-02T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-02T21:55:00+00:00",
+        "end_utc": "2026-01-05T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-05T21:55:00+00:00",
+        "end_utc": "2026-01-06T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-06T21:55:00+00:00",
+        "end_utc": "2026-01-07T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-07T21:55:00+00:00",
+        "end_utc": "2026-01-08T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-08T21:55:00+00:00",
+        "end_utc": "2026-01-09T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-09T21:55:00+00:00",
+        "end_utc": "2026-01-12T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-12T21:55:00+00:00",
+        "end_utc": "2026-01-13T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-13T21:55:00+00:00",
+        "end_utc": "2026-01-14T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-14T21:55:00+00:00",
+        "end_utc": "2026-01-15T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-15T21:55:00+00:00",
+        "end_utc": "2026-01-16T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-16T21:55:00+00:00",
+        "end_utc": "2026-01-19T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-19T17:55:00+00:00",
+        "end_utc": "2026-01-20T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-20T21:55:00+00:00",
+        "end_utc": "2026-01-21T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-21T21:55:00+00:00",
+        "end_utc": "2026-01-22T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-22T21:55:00+00:00",
+        "end_utc": "2026-01-23T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-23T21:55:00+00:00",
+        "end_utc": "2026-01-26T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-26T21:55:00+00:00",
+        "end_utc": "2026-01-27T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-27T21:55:00+00:00",
+        "end_utc": "2026-01-28T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-28T21:55:00+00:00",
+        "end_utc": "2026-01-29T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-29T21:55:00+00:00",
+        "end_utc": "2026-01-30T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-01-30T21:55:00+00:00",
+        "end_utc": "2026-02-02T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-02T21:55:00+00:00",
+        "end_utc": "2026-02-03T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-03T21:55:00+00:00",
+        "end_utc": "2026-02-04T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-04T21:55:00+00:00",
+        "end_utc": "2026-02-05T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-05T21:55:00+00:00",
+        "end_utc": "2026-02-06T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-06T21:55:00+00:00",
+        "end_utc": "2026-02-09T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-09T21:55:00+00:00",
+        "end_utc": "2026-02-10T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-10T21:55:00+00:00",
+        "end_utc": "2026-02-11T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-11T21:55:00+00:00",
+        "end_utc": "2026-02-12T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-12T21:55:00+00:00",
+        "end_utc": "2026-02-13T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-13T21:55:00+00:00",
+        "end_utc": "2026-02-17T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-17T21:55:00+00:00",
+        "end_utc": "2026-02-18T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-18T21:55:00+00:00",
+        "end_utc": "2026-02-19T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-19T21:55:00+00:00",
+        "end_utc": "2026-02-20T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-20T21:55:00+00:00",
+        "end_utc": "2026-02-23T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-23T21:55:00+00:00",
+        "end_utc": "2026-02-24T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-24T21:55:00+00:00",
+        "end_utc": "2026-02-25T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-25T21:55:00+00:00",
+        "end_utc": "2026-02-26T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-26T21:55:00+00:00",
+        "end_utc": "2026-02-27T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-02-27T21:55:00+00:00",
+        "end_utc": "2026-03-02T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-02T21:55:00+00:00",
+        "end_utc": "2026-03-03T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-03T21:55:00+00:00",
+        "end_utc": "2026-03-04T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-04T21:55:00+00:00",
+        "end_utc": "2026-03-05T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-05T21:55:00+00:00",
+        "end_utc": "2026-03-06T14:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-06T21:55:00+00:00",
+        "end_utc": "2026-03-09T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-09T20:55:00+00:00",
+        "end_utc": "2026-03-10T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-10T20:55:00+00:00",
+        "end_utc": "2026-03-11T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-11T20:55:00+00:00",
+        "end_utc": "2026-03-12T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-12T20:55:00+00:00",
+        "end_utc": "2026-03-13T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-13T20:55:00+00:00",
+        "end_utc": "2026-03-16T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-16T20:55:00+00:00",
+        "end_utc": "2026-03-17T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-17T20:55:00+00:00",
+        "end_utc": "2026-03-18T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-18T20:55:00+00:00",
+        "end_utc": "2026-03-19T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-19T20:55:00+00:00",
+        "end_utc": "2026-03-20T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-20T20:55:00+00:00",
+        "end_utc": "2026-03-23T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-23T20:55:00+00:00",
+        "end_utc": "2026-03-24T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-24T20:55:00+00:00",
+        "end_utc": "2026-03-25T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-25T20:55:00+00:00",
+        "end_utc": "2026-03-26T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-26T20:55:00+00:00",
+        "end_utc": "2026-03-27T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-27T20:55:00+00:00",
+        "end_utc": "2026-03-30T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-30T20:55:00+00:00",
+        "end_utc": "2026-03-31T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-03-31T20:55:00+00:00",
+        "end_utc": "2026-04-01T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-01T20:55:00+00:00",
+        "end_utc": "2026-04-02T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-02T20:55:00+00:00",
+        "end_utc": "2026-04-06T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-06T20:55:00+00:00",
+        "end_utc": "2026-04-07T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-07T20:55:00+00:00",
+        "end_utc": "2026-04-08T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-08T20:55:00+00:00",
+        "end_utc": "2026-04-09T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-09T20:55:00+00:00",
+        "end_utc": "2026-04-10T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-10T20:55:00+00:00",
+        "end_utc": "2026-04-13T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-13T20:55:00+00:00",
+        "end_utc": "2026-04-14T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-14T20:55:00+00:00",
+        "end_utc": "2026-04-15T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-15T20:55:00+00:00",
+        "end_utc": "2026-04-16T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-16T20:55:00+00:00",
+        "end_utc": "2026-04-17T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-17T20:55:00+00:00",
+        "end_utc": "2026-04-20T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-20T20:55:00+00:00",
+        "end_utc": "2026-04-21T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-21T20:55:00+00:00",
+        "end_utc": "2026-04-22T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-22T20:55:00+00:00",
+        "end_utc": "2026-04-23T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-23T20:55:00+00:00",
+        "end_utc": "2026-04-24T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-24T20:55:00+00:00",
+        "end_utc": "2026-04-27T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-27T20:55:00+00:00",
+        "end_utc": "2026-04-28T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-28T20:55:00+00:00",
+        "end_utc": "2026-04-29T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-29T20:55:00+00:00",
+        "end_utc": "2026-04-30T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-04-30T20:55:00+00:00",
+        "end_utc": "2026-05-01T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-01T20:55:00+00:00",
+        "end_utc": "2026-05-04T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-04T20:55:00+00:00",
+        "end_utc": "2026-05-05T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-05T20:55:00+00:00",
+        "end_utc": "2026-05-06T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-06T20:55:00+00:00",
+        "end_utc": "2026-05-07T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-07T20:55:00+00:00",
+        "end_utc": "2026-05-08T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-08T20:55:00+00:00",
+        "end_utc": "2026-05-11T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-11T20:55:00+00:00",
+        "end_utc": "2026-05-12T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-12T20:55:00+00:00",
+        "end_utc": "2026-05-13T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-13T20:55:00+00:00",
+        "end_utc": "2026-05-14T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-14T20:55:00+00:00",
+        "end_utc": "2026-05-15T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-15T20:55:00+00:00",
+        "end_utc": "2026-05-18T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-18T20:55:00+00:00",
+        "end_utc": "2026-05-19T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-19T20:55:00+00:00",
+        "end_utc": "2026-05-20T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-20T20:55:00+00:00",
+        "end_utc": "2026-05-21T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-21T20:55:00+00:00",
+        "end_utc": "2026-05-22T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-22T20:55:00+00:00",
+        "end_utc": "2026-05-26T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-26T20:55:00+00:00",
+        "end_utc": "2026-05-27T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-27T20:55:00+00:00",
+        "end_utc": "2026-05-28T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-28T20:55:00+00:00",
+        "end_utc": "2026-05-29T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-05-29T20:55:00+00:00",
+        "end_utc": "2026-06-01T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-01T20:55:00+00:00",
+        "end_utc": "2026-06-02T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-02T20:55:00+00:00",
+        "end_utc": "2026-06-03T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-03T20:55:00+00:00",
+        "end_utc": "2026-06-04T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-04T20:55:00+00:00",
+        "end_utc": "2026-06-05T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-05T20:55:00+00:00",
+        "end_utc": "2026-06-08T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-08T20:55:00+00:00",
+        "end_utc": "2026-06-09T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-09T20:55:00+00:00",
+        "end_utc": "2026-06-10T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-10T20:55:00+00:00",
+        "end_utc": "2026-06-11T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-11T20:55:00+00:00",
+        "end_utc": "2026-06-12T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-12T20:55:00+00:00",
+        "end_utc": "2026-06-15T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-15T20:55:00+00:00",
+        "end_utc": "2026-06-16T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-16T20:55:00+00:00",
+        "end_utc": "2026-06-17T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-17T20:55:00+00:00",
+        "end_utc": "2026-06-18T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-18T20:55:00+00:00",
+        "end_utc": "2026-06-22T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-22T20:55:00+00:00",
+        "end_utc": "2026-06-23T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-23T20:55:00+00:00",
+        "end_utc": "2026-06-24T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-24T20:55:00+00:00",
+        "end_utc": "2026-06-25T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-25T20:55:00+00:00",
+        "end_utc": "2026-06-26T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-26T20:55:00+00:00",
+        "end_utc": "2026-06-29T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-29T20:55:00+00:00",
+        "end_utc": "2026-06-30T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-06-30T20:55:00+00:00",
+        "end_utc": "2026-07-01T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-01T20:55:00+00:00",
+        "end_utc": "2026-07-02T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-02T20:55:00+00:00",
+        "end_utc": "2026-07-06T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-06T20:55:00+00:00",
+        "end_utc": "2026-07-07T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-07T20:55:00+00:00",
+        "end_utc": "2026-07-08T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-08T20:55:00+00:00",
+        "end_utc": "2026-07-09T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-09T20:55:00+00:00",
+        "end_utc": "2026-07-10T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-10T20:55:00+00:00",
+        "end_utc": "2026-07-13T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-13T20:55:00+00:00",
+        "end_utc": "2026-07-14T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-14T20:55:00+00:00",
+        "end_utc": "2026-07-15T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-15T20:55:00+00:00",
+        "end_utc": "2026-07-16T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-16T20:55:00+00:00",
+        "end_utc": "2026-07-17T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-17T20:55:00+00:00",
+        "end_utc": "2026-07-20T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-20T20:55:00+00:00",
+        "end_utc": "2026-07-21T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-21T20:55:00+00:00",
+        "end_utc": "2026-07-22T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-22T20:55:00+00:00",
+        "end_utc": "2026-07-23T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-23T20:55:00+00:00",
+        "end_utc": "2026-07-24T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-24T20:55:00+00:00",
+        "end_utc": "2026-07-27T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-27T20:55:00+00:00",
+        "end_utc": "2026-07-28T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-28T20:55:00+00:00",
+        "end_utc": "2026-07-29T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-29T20:55:00+00:00",
+        "end_utc": "2026-07-30T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-30T20:55:00+00:00",
+        "end_utc": "2026-07-31T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-07-31T20:55:00+00:00",
+        "end_utc": "2026-08-03T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-03T20:55:00+00:00",
+        "end_utc": "2026-08-04T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-04T20:55:00+00:00",
+        "end_utc": "2026-08-05T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-05T20:55:00+00:00",
+        "end_utc": "2026-08-06T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-06T20:55:00+00:00",
+        "end_utc": "2026-08-07T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-07T20:55:00+00:00",
+        "end_utc": "2026-08-10T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-10T20:55:00+00:00",
+        "end_utc": "2026-08-11T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-11T20:55:00+00:00",
+        "end_utc": "2026-08-12T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-12T20:55:00+00:00",
+        "end_utc": "2026-08-13T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-13T20:55:00+00:00",
+        "end_utc": "2026-08-14T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-14T20:55:00+00:00",
+        "end_utc": "2026-08-17T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-17T20:55:00+00:00",
+        "end_utc": "2026-08-18T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-18T20:55:00+00:00",
+        "end_utc": "2026-08-19T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-19T20:55:00+00:00",
+        "end_utc": "2026-08-20T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-20T20:55:00+00:00",
+        "end_utc": "2026-08-21T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-21T20:55:00+00:00",
+        "end_utc": "2026-08-24T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-24T20:55:00+00:00",
+        "end_utc": "2026-08-25T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-25T20:55:00+00:00",
+        "end_utc": "2026-08-26T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-26T20:55:00+00:00",
+        "end_utc": "2026-08-27T13:30:00+00:00",
+        "classification": "session_closed"
+      },
+      {
+        "start_utc": "2026-08-27T20:55:00+00:00",
+        "end_utc": "2026-08-28T13:30:00+00:00",
+        "classification": "session_closed"
+      }
+    ],
+    "ohlc_violations": 0,
+    "quality_status": "usable",
+    "schema_ok": true
+  },
+  "lineage": {
+    "preferred_source": "ibkr",
+    "policy": "ibkr_canonical_nt_quarantine",
+    "raw_ibkr_uri": "data\\raw\\ibkr\\31c8657d-3916-4a3c-8247-a9a01737b653\\MNQ_5m_final.parquet",
+    "raw_ninjatrader_uri": "data\\raw\\ninjatrader\\38c43d15-0deb-4719-8dee-effa1158cab5\\MNQ_5m.parquet",
+    "reconciliation_report_md": "data_catalog\\reports\\reconciliation\\MNQ_20260815T143616_f267135a.md",
+    "reconciliation_report_json": "data_catalog\\reports\\reconciliation\\MNQ_20260815T143616_f267135a.json",
+    "bar_size": "5 mins",
+    "useRTH": true,
+    "ibkr_stitch": "nearest_expiry",
+    "ibkr_contracts": [
+      {
+        "conId": 730283094,
+        "lastTradeDateOrContractMonth": "20251219",
+        "localSymbol": "MNQZ5",
+        "secType": "FUT"
+      },
+      {
+        "conId": 750150193,
+        "lastTradeDateOrContractMonth": "20260320",
+        "localSymbol": "MNQH6",
+        "secType": "FUT"
+      },
+      {
+        "conId": 770561201,
+        "lastTradeDateOrContractMonth": "20260618",
+        "localSymbol": "MNQM6",
+        "secType": "FUT"
+      },
+      {
+        "conId": 793356225,
+        "lastTradeDateOrContractMonth": "20260918",
+        "localSymbol": "MNQU6",
+        "secType": "FUT"
+      }
+    ],
+    "contract_months": [
+      "202512",
+      "202603",
+      "202606",
+      "202609"
+    ],
+    "ibkr_row_count": 35941,
+    "coverage_calendar_days": 687,
+    "published_at_utc": "2026-08-28T13:52:47.742452+00:00"
+  },
+  "preferred_source": "ibkr",
+  "report_uri": "data_catalog\\reports\\reconciliation\\MNQ_20260815T143616_f267135a.md"
+}

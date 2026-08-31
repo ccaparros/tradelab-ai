@@ -8,7 +8,7 @@ from typing import Any
 import httpx
 import streamlit as st
 
-from helpers import dataset_label, is_demo
+from helpers import dataset_label, get_json, is_demo
 
 st.set_page_config(page_title="Backtest | TradeLab AI", layout="wide")
 st.title("Backtest")
@@ -21,8 +21,8 @@ st.caption(
 api = os.getenv("API_BASE_URL", "http://localhost:8000")
 
 try:
-    datasets = httpx.get(f"{api}/v1/datasets", timeout=30).json().get("items", [])
-    strategies = httpx.get(f"{api}/v1/strategies", timeout=30).json().get("items", [])
+    datasets = get_json(f"{api}/v1/datasets").get("items", [])
+    strategies = get_json(f"{api}/v1/strategies").get("items", [])
 except Exception as exc:  # noqa: BLE001
     st.error(f"No se pudo contactar la API ({api}): {exc}")
     st.stop()

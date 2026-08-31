@@ -7,7 +7,7 @@ import os
 import httpx
 import streamlit as st
 
-from helpers import dataset_label, is_demo, preferred_source
+from helpers import dataset_label, get_json, is_demo, preferred_source
 
 st.set_page_config(page_title="Catálogo | TradeLab AI", layout="wide")
 st.title("Catálogo y calidad")
@@ -16,7 +16,7 @@ st.caption("Elige un dataset por instrumento, tipo (DEMO vs real) y cobertura. N
 api = os.getenv("API_BASE_URL", "http://localhost:8000")
 
 try:
-    datasets = httpx.get(f"{api}/v1/datasets", timeout=30).json().get("items", [])
+    datasets = get_json(f"{api}/v1/datasets").get("items", [])
 except Exception as exc:  # noqa: BLE001
     st.error(f"No se pudo contactar la API ({api}): {exc}")
     st.stop()
