@@ -12,7 +12,7 @@ import argparse
 import json
 import sys
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from decimal import Decimal
 from pathlib import Path
 
@@ -84,7 +84,9 @@ def reconcile_instrument(instrument: str, *, data_root: Path, reports_dir: Path)
             "close_corr": float(merged["close_nt"].corr(merged["close_ib"])),
             "close_exact_match_rate": float((dclose <= 1e-9).mean()),
             "close_within_1_tick_rate": float((dclose <= float(TICK[instrument]) + 1e-9).mean()),
-            "close_within_4_ticks_rate": float((dclose <= 4 * float(TICK[instrument]) + 1e-9).mean()),
+            "close_within_4_ticks_rate": float(
+                (dclose <= 4 * float(TICK[instrument]) + 1e-9).mean()
+            ),
             "close_abs_diff_median": float(dclose.median()),
             "close_abs_diff_p95": float(dclose.quantile(0.95)),
             "close_abs_diff_max": float(dclose.max()),
@@ -115,7 +117,7 @@ def reconcile_instrument(instrument: str, *, data_root: Path, reports_dir: Path)
     report_id = str(uuid.uuid4())
     out_dir = reports_dir / "reconciliation"
     out_dir.mkdir(parents=True, exist_ok=True)
-    stub = f"{instrument}_{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S')}_{report_id[:8]}"
+    stub = f"{instrument}_{datetime.now(UTC).strftime('%Y%m%dT%H%M%S')}_{report_id[:8]}"
     json_path = out_dir / f"{stub}.json"
     md_path = out_dir / f"{stub}.md"
 
@@ -147,7 +149,7 @@ def reconcile_instrument(instrument: str, *, data_root: Path, reports_dir: Path)
             "Volume relative differences are informative only.",
             "IBKR series was requested with useRTH=True; NT chart may include broader session bars outside overlap.",
         ],
-        "created_at_utc": datetime.now(timezone.utc).isoformat(),
+        "created_at_utc": datetime.now(UTC).isoformat(),
     }
     json_path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
 
@@ -216,7 +218,9 @@ def main(argv: list[str] | None = None) -> int:
     summaries = []
     for inst in instruments:
         try:
-            report = reconcile_instrument(inst, data_root=args.data_root, reports_dir=args.reports_dir)
+            report = reconcile_instrument(
+                inst, data_root=args.data_root, reports_dir=args.reports_dir
+            )
             summaries.append(
                 {
                     "instrument": inst,
@@ -224,7 +228,9 @@ def main(argv: list[str] | None = None) -> int:
                     "common": report["common_coverage"]["timestamps"],
                     "conflicts": report["conflict_timestamps"],
                     "conflict_rate": report["conflict_rate"],
-                    "within_1_tick": (report.get("price_stats") or {}).get("close_within_1_tick_rate"),
+                    "within_1_tick": (report.get("price_stats") or {}).get(
+                        "close_within_1_tick_rate"
+                    ),
                     "close_corr": (report.get("price_stats") or {}).get("close_corr"),
                     "quarantine": report["quarantine_count"],
                     "vol_rel": report["volume_rel_diff"].get("mean_abs_pct"),

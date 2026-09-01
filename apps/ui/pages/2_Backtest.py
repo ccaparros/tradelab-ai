@@ -7,7 +7,6 @@ from typing import Any
 
 import httpx
 import streamlit as st
-
 from helpers import dataset_label, get_json, is_demo
 
 st.set_page_config(page_title="Backtest | TradeLab AI", layout="wide")
@@ -133,11 +132,15 @@ if st.button("Ejecutar backtest", type="primary"):
                     st.caption("bloqueado")
                 else:
                     st.metric("net PnL", f"{blob.get('net_pnl', '—')}")
-                    st.caption(f"trades={blob.get('trade_count', '—')} · DD={blob.get('max_drawdown', '—')}")
+                    st.caption(
+                        f"trades={blob.get('trade_count', '—')} · DD={blob.get('max_drawdown', '—')}"
+                    )
         wf = body.get("walk_forward") or {}
         st.subheader("Walk-forward (sin holdout)")
         if wf.get("status") != "ok":
-            st.caption(f"No aplicable: {wf.get('reason') or wf.get('status')}. Hace falta más de una sesión.")
+            st.caption(
+                f"No aplicable: {wf.get('reason') or wf.get('status')}. Hace falta más de una sesión."
+            )
         else:
             st.caption(
                 f"Esquema expanding · {wf.get('n_folds')} folds · "

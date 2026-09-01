@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-import enum
 import uuid
 from datetime import datetime
 from decimal import Decimal
+from enum import StrEnum
 
 from sqlalchemy import DateTime, Enum, ForeignKey, Integer, Numeric, String, Text, func
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -14,7 +14,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from tradelab.datasets.models import Base
 
 
-class QuarantineStatus(str, enum.Enum):
+class QuarantineStatus(StrEnum):
     open = "open"
     accepted_divergence = "accepted_divergence"
     resolved = "resolved"

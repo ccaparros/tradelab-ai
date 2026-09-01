@@ -10,7 +10,9 @@ from tradelab.rag.indexer import ensure_policy_documents
 from tradelab.rag.scoring import build_idf, hybrid_score, tfidf_vector
 
 
-def hybrid_search(query: str, *, top_k: int = 5, filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+def hybrid_search(
+    query: str, *, top_k: int = 5, filters: dict[str, Any] | None = None
+) -> list[dict[str, Any]]:
     """Rank chunks with BM25 + TF-IDF cosine; bootstrap policies if corpus empty."""
     data = load_corpus()
     if not data["chunks"]:
@@ -25,7 +27,9 @@ def hybrid_search(query: str, *, top_k: int = 5, filters: dict[str, Any] | None 
         source_contains = filters.get("source_contains")
         if source_contains:
             needle = str(source_contains).replace("\\", "/")
-            chunks = [c for c in chunks if needle in str(c.get("source_uri", "")).replace("\\", "/")]
+            chunks = [
+                c for c in chunks if needle in str(c.get("source_uri", "")).replace("\\", "/")
+            ]
 
     if not chunks:
         return []

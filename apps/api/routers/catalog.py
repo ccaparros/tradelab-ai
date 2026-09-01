@@ -14,7 +14,6 @@ from tradelab.datasets.publisher import publish_canonical_dataset
 from tradelab.datasets.store import get_dataset, list_datasets, upsert_dataset
 from tradelab.ingestion.register import register_raw_batch
 from tradelab.quality.reconcile import reconcile_frames
-from tradelab.quality.validators import build_quality_report
 
 router = APIRouter()
 
@@ -68,6 +67,9 @@ def api_get_quality(dataset_id: str) -> dict:
         "gap_count": quality.get("gap_count", 0),
         "gaps": quality.get("gaps", []),
         "ohlc_violations": quality.get("ohlc_violations", 0),
+        "tick_violations": quality.get("tick_violations", 0),
+        "tick_alignment_ok": quality.get("tick_alignment_ok", True),
+        "schema_ok": quality.get("schema_ok", False),
         "report_uri": ds.get("report_uri"),
         "quality_status": ds.get("quality_status"),
     }

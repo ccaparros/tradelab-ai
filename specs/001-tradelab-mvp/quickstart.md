@@ -65,7 +65,7 @@ curl -s -X POST http://localhost:8000/v1/experiments \
       \"atr_filter_mult\": 1.0,
       \"stop_risk_mult\": 1.0,
       \"target_risk_mult\": 2.0,
-      \"session_exit_time\": \"15:45\",
+      \"session_exit_time\": \"14:55\",
       \"commission_per_side\": 0.62,
       \"slippage_ticks\": 1
     },
@@ -73,12 +73,19 @@ curl -s -X POST http://localhost:8000/v1/experiments \
   }" | jq .
 ```
 
+`session_exit_time` se interpreta en `America/Chicago`; la conversión a UTC
+sigue automáticamente el horario de verano. Los splits automáticos siempre
+terminan en fronteras de sesión completas.
+
 Guardar `experiment_id` e `integrity_hash`. Repetir el mismo POST.
 
 **Expected**:
 - Segundo run → mismo `integrity_hash` y mismas métricas netas (SC-002)
 - Métricas incluyen costes
 - `holdout_consumed=false`
+
+El holdout se revela una sola vez por dataset usando `consume_holdout=true`.
+Intentos posteriores reciben `409 holdout_already_consumed`.
 
 ```bash
 curl -s http://localhost:8000/v1/experiments/$EXPERIMENT_ID/trades?limit=10 | jq .

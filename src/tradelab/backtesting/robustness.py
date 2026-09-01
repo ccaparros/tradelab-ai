@@ -11,6 +11,7 @@ import pandas as pd
 
 from tradelab.backtesting.engine import TradeFill
 from tradelab.backtesting.metrics import compute_metrics
+from tradelab.backtesting.sessions import with_session_date
 from tradelab.backtesting.splits import expanding_walk_forward_windows
 from tradelab.backtesting.strategies.registry import StrategySpec
 
@@ -32,14 +33,12 @@ def run_session_long_baseline(
     slippage_ticks: int,
     tick_size: float = 0.25,
     multiplier: float = 5.0,
+    session_timezone: str = "America/Chicago",
 ) -> dict[str, Any]:
     """One long per session: first bar open → last bar close, with costs."""
     if df.empty:
         return {"kind": "session_long", "trade_count": 0, "net_pnl": 0.0}
-    work = df.copy()
-    work["timestamp_utc"] = pd.to_datetime(work["timestamp_utc"], utc=True)
-    if "session_date" not in work.columns:
-        work["session_date"] = work["timestamp_utc"].dt.strftime("%Y-%m-%d")
+    work = with_session_date(df, session_timezone)
     slip = slippage_ticks * tick_size
     fills: list[TradeFill] = []
     for session, g in work.groupby("session_date", sort=True):
@@ -78,15 +77,36 @@ def run_walk_forward(
     params: Any,
     *,
     n_folds: int = 3,
+    tick_size: float,
+    multiplier: float,
+    session_timezone: str,
 ) -> dict[str, Any]:
-    windows = expanding_walk_forward_windows(research_df, n_folds=n_folds)
+    windows = expanding_walk_forward_windows(
+        research_df,
+        n_folds=n_folds,
+        session_timezone=session_timezone,
+    )
     if not windows:
         return {"status": "skipped", "reason": "insufficient_sessions", "folds": []}
     folds = []
     oos_pnls: list[float] = []
     for w in windows:
-        is_fills = spec.run(w["train_df"], params, split_label=f"wf{w['fold']}_is")
-        oos_fills = spec.run(w["test_df"], params, split_label=f"wf{w['fold']}_oos")
+        is_fills = spec.run(
+            w["train_df"],
+            params,
+            split_label=f"wf{w['fold']}_is",
+            tick_size=tick_size,
+            multiplier=multiplier,
+            session_timezone=session_timezone,
+        )
+        oos_fills = spec.run(
+            w["test_df"],
+            params,
+            split_label=f"wf{w['fold']}_oos",
+            tick_size=tick_size,
+            multiplier=multiplier,
+            session_timezone=session_timezone,
+        )
         is_m = _metrics_blob(is_fills)
         oos_m = _metrics_blob(oos_fills)
         oos_pnls.append(float(oos_m["net_pnl"]))
@@ -158,6 +178,10 @@ def run_sensitivity(
     val_df: pd.DataFrame,
     spec: StrategySpec,
     base_params: Any,
+    *,
+    tick_size: float,
+    multiplier: float,
+    session_timezone: str,
 ) -> dict[str, Any]:
     base = base_params.model_dump()
     rows: list[dict[str, Any]] = []
@@ -169,9 +193,35 @@ def run_sensitivity(
             parsed = spec.validate(payload)
         except Exception:
             continue
-        train_m = _metrics_blob(spec.run(train_df, parsed, split_label="sens_train"))
-        val_m = _metrics_blob(spec.run(val_df, parsed, split_label="sens_val"))
-        rows.append({"label": label, "kind": kind, "parameters": parsed.model_dump(), "train": train_m, "validation": val_m})
+        train_m = _metrics_blob(
+            spec.run(
+                train_df,
+                parsed,
+                split_label="sens_train",
+                tick_size=tick_size,
+                multiplier=multiplier,
+                session_timezone=session_timezone,
+            )
+        )
+        val_m = _metrics_blob(
+            spec.run(
+                val_df,
+                parsed,
+                split_label="sens_val",
+                tick_size=tick_size,
+                multiplier=multiplier,
+                session_timezone=session_timezone,
+            )
+        )
+        rows.append(
+            {
+                "label": label,
+                "kind": kind,
+                "parameters": parsed.model_dump(),
+                "train": train_m,
+                "validation": val_m,
+            }
+        )
     return {
         "status": "ok" if rows else "skipped",
         "base_parameters": base,

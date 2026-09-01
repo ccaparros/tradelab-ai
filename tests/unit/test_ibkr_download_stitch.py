@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import pandas as pd
-
 from connectors.ibkr.download_history import stitch_nearest_expiry
 
 

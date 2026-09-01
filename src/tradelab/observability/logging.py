@@ -33,7 +33,9 @@ class CorrelationFilter(logging.Filter):
         return True
 
 
-def get_logger(name: str, *, analysis_id: str | None = None, experiment_id: str | None = None) -> logging.Logger:
+def get_logger(
+    name: str, *, analysis_id: str | None = None, experiment_id: str | None = None
+) -> logging.Logger:
     logger = logging.getLogger(name)
     correlation = analysis_id or experiment_id or "-"
     # Avoid stacking duplicate filters

@@ -30,9 +30,7 @@ def is_demo(ds: dict[str, Any]) -> bool:
 
 def preferred_source(ds: dict[str, Any]) -> str:
     return str(
-        ds.get("preferred_source")
-        or (ds.get("lineage") or {}).get("preferred_source")
-        or "?"
+        ds.get("preferred_source") or (ds.get("lineage") or {}).get("preferred_source") or "?"
     )
 
 
@@ -47,7 +45,9 @@ def dataset_label(ds: dict[str, Any]) -> str:
     )
 
 
-def experiment_label(exp: dict[str, Any], datasets_by_id: dict[str, dict[str, Any]] | None = None) -> str:
+def experiment_label(
+    exp: dict[str, Any], datasets_by_id: dict[str, dict[str, Any]] | None = None
+) -> str:
     datasets_by_id = datasets_by_id or {}
     ds = datasets_by_id.get(str(exp.get("dataset_id")), {})
     instrument = ds.get("instrument") or "?"

@@ -13,7 +13,7 @@ class OrbAtrParams(BaseModel):
     atr_filter_mult: float = Field(default=1.0, ge=0)
     stop_risk_mult: float = Field(default=1.0, gt=0)
     target_risk_mult: float = Field(default=2.0, gt=0)
-    session_exit_time: str = Field(default="15:45")
+    session_exit_time: str = Field(default="14:55")
     commission_per_side: float = Field(default=0.62, ge=0)
     slippage_ticks: int = Field(default=1, ge=0)
     max_entries_per_session: int = Field(default=1)

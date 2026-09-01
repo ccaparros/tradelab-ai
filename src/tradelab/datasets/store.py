@@ -10,9 +10,13 @@ from __future__ import annotations
 import json
 import threading
 import uuid
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
+from filelock import FileLock
+
+from tradelab.ingestion.storage import atomic_write_text
 from tradelab.observability.settings import get_settings
 
 _lock = threading.Lock()
@@ -27,17 +31,32 @@ def _store_path() -> Path:
 def _load() -> dict[str, Any]:
     path = _store_path()
     if not path.exists():
-        return {"datasets": {}, "experiments": {}, "analyses": {}, "documents": {}}
-    return json.loads(path.read_text(encoding="utf-8"))
+        return {
+            "datasets": {},
+            "experiments": {},
+            "analyses": {},
+            "documents": {},
+            "holdout_claims": {},
+        }
+    data = json.loads(path.read_text(encoding="utf-8"))
+    data.setdefault("holdout_claims", {})
+    return data
 
 
 def _save(data: dict[str, Any]) -> None:
     path = _store_path()
-    path.write_text(json.dumps(data, indent=2, default=str), encoding="utf-8")
+    atomic_write_text(path, json.dumps(data, indent=2, default=str))
+
+
+@contextmanager
+def _write_guard():
+    with _lock:
+        with FileLock(f"{_store_path()}.lock"):
+            yield
 
 
 def upsert_dataset(record: dict[str, Any]) -> dict[str, Any]:
-    with _lock:
+    with _write_guard():
         data = _load()
         key = str(record["dataset_id"])
         data["datasets"][key] = record
@@ -58,7 +77,7 @@ def get_dataset(dataset_id: str) -> dict[str, Any] | None:
 
 
 def upsert_experiment(record: dict[str, Any]) -> dict[str, Any]:
-    with _lock:
+    with _write_guard():
         data = _load()
         key = str(record["experiment_id"])
         data["experiments"][key] = record
@@ -78,7 +97,7 @@ def list_experiments(dataset_id: str | None = None) -> list[dict[str, Any]]:
 
 
 def upsert_analysis(record: dict[str, Any]) -> dict[str, Any]:
-    with _lock:
+    with _write_guard():
         data = _load()
         key = str(record["analysis_id"])
         data.setdefault("analyses", {})[key] = record
@@ -88,6 +107,39 @@ def upsert_analysis(record: dict[str, Any]) -> dict[str, Any]:
 
 def get_analysis(analysis_id: str) -> dict[str, Any] | None:
     return _load().get("analyses", {}).get(str(analysis_id))
+
+
+def get_holdout_claim(dataset_id: str) -> dict[str, Any] | None:
+    return _load().get("holdout_claims", {}).get(str(dataset_id))
+
+
+def claim_holdout(dataset_id: str, claim: dict[str, Any]) -> dict[str, Any]:
+    """Atomically claim the dataset holdout once within this store process."""
+    with _write_guard():
+        data = _load()
+        claims = data.setdefault("holdout_claims", {})
+        key = str(dataset_id)
+        existing = claims.get(key)
+        if existing:
+            raise PermissionError(
+                "holdout_already_consumed: "
+                f"dataset={key} experiment={existing.get('experiment_id')}"
+            )
+        claims[key] = claim
+        _save(data)
+        return claim
+
+
+def release_holdout_claim(dataset_id: str, experiment_id: str) -> None:
+    """Release only an incomplete claim created by the same experiment."""
+    with _write_guard():
+        data = _load()
+        claims = data.setdefault("holdout_claims", {})
+        key = str(dataset_id)
+        existing = claims.get(key)
+        if existing and str(existing.get("experiment_id")) == str(experiment_id):
+            del claims[key]
+            _save(data)
 
 
 def new_id() -> str:

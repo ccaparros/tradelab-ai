@@ -11,7 +11,7 @@ import argparse
 import json
 import sys
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import pandas as pd
@@ -38,7 +38,9 @@ def _latest_ibkr_final(instrument: str, data_root: Path) -> Path:
 def _latest_recon_report(instrument: str, reports_dir: Path) -> dict[str, str | None]:
     folder = reports_dir / "reconciliation"
     mds = sorted(folder.glob(f"{instrument}_*.md"), key=lambda p: p.stat().st_mtime, reverse=True)
-    jsons = sorted(folder.glob(f"{instrument}_*.json"), key=lambda p: p.stat().st_mtime, reverse=True)
+    jsons = sorted(
+        folder.glob(f"{instrument}_*.json"), key=lambda p: p.stat().st_mtime, reverse=True
+    )
     return {
         "md": str(mds[0]) if mds else None,
         "json": str(jsons[0]) if jsons else None,
@@ -92,17 +94,25 @@ def publish_one(instrument: str, *, data_root: Path, reports_dir: Path) -> dict:
             "contract_months": months,
             "ibkr_row_count": ibkr_manifest.get("row_count"),
             "coverage_calendar_days": ibkr_manifest.get("coverage_calendar_days"),
-            "published_at_utc": datetime.now(timezone.utc).isoformat(),
+            "published_at_utc": datetime.now(UTC).isoformat(),
         },
     )
 
     # Classified overnight gaps must not block usable IBKR RTH canonical for MVP
     quality = published["quality"]
     status = quality.get("quality_status", "draft")
-    if status != "usable" and quality.get("duplicate_count", 1) == 0 and quality.get("ohlc_violations", 1) == 0:
+    if (
+        status != "usable"
+        and quality.get("duplicate_count", 1) == 0
+        and quality.get("ohlc_violations", 1) == 0
+    ):
         # gaps are classified by design; promote to usable with warning
         status = "usable"
-        quality = {**quality, "quality_status": "usable", "promotion_note": "gaps classified; IBKR RTH preferred"}
+        quality = {
+            **quality,
+            "quality_status": "usable",
+            "promotion_note": "gaps classified; IBKR RTH preferred",
+        }
 
     record = {
         "dataset_id": str(published["dataset_id"]),
@@ -180,7 +190,11 @@ def main(argv: list[str] | None = None) -> int:
             {
                 "ok": all(r.get("ok") for r in results),
                 "datasets_in_store": [
-                    {"dataset_id": d["dataset_id"], "instrument": d.get("instrument"), "quality_status": d.get("quality_status")}
+                    {
+                        "dataset_id": d["dataset_id"],
+                        "instrument": d.get("instrument"),
+                        "quality_status": d.get("quality_status"),
+                    }
                     for d in list_datasets()
                 ],
                 "published": results,

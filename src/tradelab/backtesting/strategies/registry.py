@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any
 
 from tradelab.backtesting.engine import TradeFill, run_orb_atr
 from tradelab.backtesting.strategies import orb_atr, vwap_fade

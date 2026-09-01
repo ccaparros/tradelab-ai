@@ -11,7 +11,13 @@ from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
 
 from tradelab.agents.llm import chat_completion, llm_configured
-from tradelab.agents.schema import AnalysisOutput, MetricRef, SourceRef, verify_analysis
+from tradelab.agents.schema import (
+    AnalysisOutput,
+    MetricRef,
+    SourceRef,
+    evidence_numeric_values,
+    verify_analysis,
+)
 from tradelab.agents.tools import (
     get_dataset_quality,
     get_experiment_metrics,
@@ -107,8 +113,7 @@ def _load_system_prompt() -> str:
     path = Path(__file__).resolve().parents[1] / "prompts" / "system_research.j2"
     base = path.read_text(encoding="utf-8") if path.exists() else ""
     return (
-        base
-        + "\n\nYou MUST reply with a JSON object only, keys: "
+        base + "\n\nYou MUST reply with a JSON object only, keys: "
         "answer (string), assumptions (string[]), warnings (string[]), confidence (0..1). "
         "Do NOT invent financial figures. Use ONLY numbers present in EVIDENCE. "
         "If evidence is insufficient, say so clearly. Research-only: never suggest live orders."
@@ -120,43 +125,80 @@ def _collect_evidence(
     query: str,
     dataset_id: str | None,
     experiment_id: str | None,
-) -> tuple[list[dict[str, Any]], list[MetricRef], list[SourceRef], set[tuple[str, str, str]], set[str], dict[str, Any]]:
+) -> tuple[
+    list[dict[str, Any]],
+    list[MetricRef],
+    list[SourceRef],
+    set[tuple[str, str, str]],
+    set[str],
+    dict[str, Any],
+]:
     invocations: list[dict[str, Any]] = []
     metrics: list[MetricRef] = []
     sources: list[SourceRef] = []
     known_metrics: set[tuple[str, str, str]] = set()
     known_docs: set[str] = set()
-    pack: dict[str, Any] = {"query": query, "dataset": None, "experiment": None, "trades_sample": [], "documents": []}
+    pack: dict[str, Any] = {
+        "query": query,
+        "dataset": None,
+        "experiment": None,
+        "trades_sample": [],
+        "documents": [],
+    }
 
     if dataset_id:
         quality = get_dataset_quality(dataset_id)
-        invocations.append({"tool_name": "get_dataset_quality", "arguments": {"dataset_id": dataset_id}})
+        invocations.append(
+            {"tool_name": "get_dataset_quality", "arguments": {"dataset_id": dataset_id}}
+        )
         pack["dataset"] = quality
 
     if experiment_id:
         m = get_experiment_metrics(experiment_id)
-        invocations.append({"tool_name": "get_experiment_metrics", "arguments": {"experiment_id": experiment_id}})
+        invocations.append(
+            {"tool_name": "get_experiment_metrics", "arguments": {"experiment_id": experiment_id}}
+        )
         pack["experiment"] = m
         by_split = m.get("metrics_by_split") or {}
         for split_name, blob in by_split.items():
             if not isinstance(blob, dict) or blob.get("blocked"):
                 continue
-            for key in ("net_pnl", "trade_count", "win_rate", "max_drawdown", "profit_factor", "expectancy"):
+            for key in (
+                "net_pnl",
+                "trade_count",
+                "win_rate",
+                "max_drawdown",
+                "profit_factor",
+                "expectancy",
+            ):
                 if key in blob:
                     name = f"{key}_{split_name}"
-                    metrics.append(MetricRef(name=name, value=blob[key], experiment_id=experiment_id))
+                    metrics.append(
+                        MetricRef(name=name, value=blob[key], experiment_id=experiment_id)
+                    )
                     known_metrics.add((name, str(blob[key]), experiment_id))
         trades = get_trade_sample(experiment_id, limit=5)
-        invocations.append({"tool_name": "get_trade_sample", "arguments": {"experiment_id": experiment_id, "limit": 5}})
+        invocations.append(
+            {
+                "tool_name": "get_trade_sample",
+                "arguments": {"experiment_id": experiment_id, "limit": 5},
+            }
+        )
         pack["trades_sample"] = trades
 
     docs = search_research_documents(query, top_k=3)
-    invocations.append({"tool_name": "search_research_documents", "arguments": {"query": query, "top_k": 3}})
+    invocations.append(
+        {"tool_name": "search_research_documents", "arguments": {"query": query, "top_k": 3}}
+    )
     pack["documents"] = docs
     for d in docs:
         known_docs.add(d["document_id"])
         sources.append(
-            SourceRef(document_id=d["document_id"], citation=d.get("excerpt", "")[:240], chunk_id=d.get("chunk_id"))
+            SourceRef(
+                document_id=d["document_id"],
+                citation=d.get("excerpt", "")[:240],
+                chunk_id=d.get("chunk_id"),
+            )
         )
 
     return invocations, metrics, sources, known_metrics, known_docs, pack
@@ -335,9 +377,12 @@ def _node_research(state: AgentState) -> AgentState:
         confidence=confidence,
         tool_invocations=invocations,
     )
-    verified = verify_analysis(out, known_metric_values=known_metrics, known_document_ids=known_docs or {"none"})
-    if not sources:
-        verified = out
+    verified = verify_analysis(
+        out,
+        known_metric_values=known_metrics,
+        known_document_ids=known_docs or {"none"},
+        known_numeric_values=evidence_numeric_values(pack),
+    )
     record = _persist(verified, {"llm": llm_meta, "graph": "langgraph"})
     return {**state, "record": record, "done": True}
 

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import shutil
 import uuid
 from pathlib import Path
 
@@ -21,7 +20,7 @@ def main() -> None:
     if not fixture.exists():
         raise SystemExit(f"Missing fixture {fixture}")
 
-    demo_dir = Path("data_catalog/demo_snapshot")
+    demo_dir = Path(settings.data_root) / "demo_snapshot"
     demo_dir.mkdir(parents=True, exist_ok=True)
     df = pd.read_parquet(fixture)
     published = publish_canonical_dataset(

@@ -25,17 +25,17 @@ def reconcile_frames(
             "quarantine": [],
         }
 
-    l = left.set_index("timestamp_utc")
-    r = right.set_index("timestamp_utc")
-    common = l.index.intersection(r.index)
+    left_by_time = left.set_index("timestamp_utc")
+    right_by_time = right.set_index("timestamp_utc")
+    common = left_by_time.index.intersection(right_by_time.index)
     tick = float(tick_size)
     discrepancies: list[dict[str, Any]] = []
     quarantine: list[dict[str, Any]] = []
     vol_diffs: list[float] = []
 
     for ts in common:
-        row_l = l.loc[ts]
-        row_r = r.loc[ts]
+        row_l = left_by_time.loc[ts]
+        row_r = right_by_time.loc[ts]
         for field in ("open", "high", "low", "close"):
             a = float(row_l[field])
             b = float(row_r[field])
@@ -56,8 +56,8 @@ def reconcile_frames(
     return {
         "common_coverage": {
             "timestamps": int(len(common)),
-            "left_only": int(len(l.index.difference(r.index))),
-            "right_only": int(len(r.index.difference(l.index))),
+            "left_only": int(len(left_by_time.index.difference(right_by_time.index))),
+            "right_only": int(len(right_by_time.index.difference(left_by_time.index))),
         },
         "price_discrepancies": discrepancies,
         "volume_rel_diff": {

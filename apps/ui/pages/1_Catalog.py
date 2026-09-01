@@ -6,12 +6,13 @@ import os
 
 import httpx
 import streamlit as st
-
 from helpers import dataset_label, get_json, is_demo, preferred_source
 
 st.set_page_config(page_title="Catálogo | TradeLab AI", layout="wide")
 st.title("Catálogo y calidad")
-st.caption("Elige un dataset por instrumento, tipo (DEMO vs real) y cobertura. No hace falta copiar el UUID.")
+st.caption(
+    "Elige un dataset por instrumento, tipo (DEMO vs real) y cobertura. No hace falta copiar el UUID."
+)
 
 api = os.getenv("API_BASE_URL", "http://localhost:8000")
 
@@ -29,7 +30,11 @@ labels = {dataset_label(d): d for d in datasets}
 choice = st.selectbox("Dataset", list(labels.keys()))
 ds = labels[choice]
 
-kind = "DEMO (fixture corto, no uses esto para la defensa con datos reales)" if is_demo(ds) else "Histórico real"
+kind = (
+    "DEMO (fixture corto, no uses esto para la defensa con datos reales)"
+    if is_demo(ds)
+    else "Histórico real"
+)
 st.info(
     f"**{ds.get('instrument')} {ds.get('contract_month')}** · {kind}  \n"
     f"Calidad `{ds.get('quality_status')}` · fuente `{preferred_source(ds)}`  \n"
@@ -47,7 +52,9 @@ col4.metric("Estado", quality.get("quality_status") or ds.get("quality_status") 
 gaps = quality.get("gaps") or []
 if gaps:
     st.subheader("Gaps clasificados")
-    st.caption("`session_closed` = cierre de sesión / noche / fin de semana, no un fallo de ingesta.")
+    st.caption(
+        "`session_closed` = cierre de sesión / noche / fin de semana, no un fallo de ingesta."
+    )
     st.dataframe(gaps, use_container_width=True, hide_index=True)
 
 with st.expander("Linaje y JSON completo"):

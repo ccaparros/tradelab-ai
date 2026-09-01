@@ -26,7 +26,9 @@ class DocumentSearchRequest(BaseModel):
 
 @router.post("/v1/analysis")
 def api_create_analysis(body: AnalysisRequest) -> dict:
-    return run_analysis(query=body.query, dataset_id=body.dataset_id, experiment_id=body.experiment_id)
+    return run_analysis(
+        query=body.query, dataset_id=body.dataset_id, experiment_id=body.experiment_id
+    )
 
 
 @router.get("/v1/analysis/{analysis_id}")

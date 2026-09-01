@@ -15,6 +15,7 @@ from tradelab.backtesting.engine import (
     _shifted_atr,
     _shifted_session_vwap,
 )
+from tradelab.backtesting.sessions import exchange_local_time, with_session_date
 
 STRATEGY_ID = "vwap_fade_intraday"
 STRATEGY_VERSION = "0.1.0"
@@ -26,7 +27,7 @@ class VwapFadeParams(BaseModel):
     extension_atr: float = Field(default=0.7, gt=0)
     max_extension_atr: float = Field(default=2.4, gt=0)
     stop_atr_mult: float = Field(default=0.8, gt=0)
-    session_exit_time: str = Field(default="20:00")
+    session_exit_time: str = Field(default="14:55")
     commission_per_side: float = Field(default=0.62, ge=0)
     slippage_ticks: int = Field(default=1, ge=0)
     max_entries_per_session: int = Field(default=1)
@@ -61,6 +62,7 @@ def run_vwap_fade(
     *,
     tick_size: float = 0.25,
     multiplier: float = 5.0,
+    session_timezone: str = "America/Chicago",
     split_label: str = "train",
 ) -> list[TradeFill]:
     """Fade stretched prices back to session VWAP.
@@ -71,11 +73,9 @@ def run_vwap_fade(
     if df.empty:
         return []
 
-    work = df.copy()
-    work["timestamp_utc"] = pd.to_datetime(work["timestamp_utc"], utc=True)
+    work = with_session_date(df, session_timezone)
     work = work.sort_values("timestamp_utc").reset_index(drop=True)
     work["atr"] = _shifted_atr(work, params.atr_period)
-    work["session_date"] = work["timestamp_utc"].dt.strftime("%Y-%m-%d")
 
     exit_t = _parse_hhmm(params.session_exit_time)
     slip = params.slippage_ticks * tick_size
@@ -94,7 +94,7 @@ def run_vwap_fade(
         for i in range(params.warmup_bars, len(session_df)):
             row = session_df.iloc[i]
             ts: datetime = row["timestamp_utc"].to_pydatetime()
-            local_t = ts.timetz().replace(tzinfo=None)
+            local_t = exchange_local_time(ts, session_timezone)
             atr = row["atr"]
             vwap = row["vwap"]
             if pd.isna(atr) or pd.isna(vwap) or float(atr) <= 0:
