@@ -42,6 +42,16 @@ def test_rejects_unknown_document():
 
 
 @pytest.mark.unit
+def test_redact_drops_unsupported_keeps_evidence_numbers():
+    from tradelab.agents.schema import redact_unsupported_numbers
+
+    text = "train es 12.5 pero invento 999.99"
+    out = redact_unsupported_numbers(text, {"12.5"})
+    assert "12.5" in out
+    assert "999.99" not in out
+
+
+@pytest.mark.unit
 def test_numeric_evidence_excludes_untrusted_question_numbers():
     values = evidence_numeric_values(
         {

@@ -42,9 +42,9 @@ backtest se alarga.
 **Dices:**
 
 > Soy Casildo Caparrós. TradeLab AI es una plataforma académica de
-> investigación cuantitativa sobre futuros micro MES y MNQ. Solo investigación:
-> no envía órdenes reales. El flujo es dato trazable, backtest reproducible
-> e IA acotada a evidencia.
+> investigación cuantitativa sobre futuros micro del S&P 500 y del Nasdaq.
+> Solo investigación: no envía órdenes reales. El flujo es dato trazable,
+> backtest reproducible e IA acotada a evidencia.
 
 ### 0:18–0:50 — Catálogo y calidad
 
@@ -56,12 +56,13 @@ expander **Linaje**.
 
 **Dices:**
 
-> El catálogo muestra datasets canónicos versionados. Este MES es histórico
-> IBKR de unos 22 meses en barras de 5 minutos, sesión regular. Los gaps
-> están clasificados como cierre de sesión, no como fallos de ingesta.
-> La fuente preferida es IBKR; NinjaTrader queda como evidencia de
-> reconciliación, sin mezclar OHLC en silencio. Checksum y linaje van
-> con el dataset.
+> El catálogo muestra datasets canónicos versionados. Este Micro S&P 500 es
+> histórico de Interactive Brokers de unos 22 meses en barras de 5 minutos,
+> sesión regular. Los huecos están clasificados como cierre de sesión, no
+> como fallos de ingesta. La fuente preferida es Interactive Brokers;
+> NinjaTrader queda como evidencia de reconciliación, sin mezclar en
+> silencio apertura, máximo, mínimo y cierre. Checksum y linaje van con
+> el dataset.
 
 No digas: “serie continua de Interactive Brokers” ni “frente líquido desde
 2024”. Si te preguntan luego: el stitch es nearest-expiry de vencimientos
@@ -78,13 +79,14 @@ holdout **bloqueado**, tabla walk-forward, baseline, sensibilidad.
 
 **Dices:**
 
-> Lanzamos ORB con ATR, costes incluidos. Splits temporales: train,
-> validation y holdout. El holdout está bloqueado: no se usa para elegir
-> parámetros. El hash de integridad mezcla dataset, código y parámetros:
-> el mismo experimento es reproducible. Abajo, walk-forward expanding
-> solo sobre train y validation, un baseline ingenuo y sensibilidad a
-> comisión y slippage. La rentabilidad no es el criterio de éxito del
-> proyecto; sí lo es que el recuento sea auditable.
+> Lanzamos la estrategia de ruptura del rango de apertura, con stops
+> según el rango verdadero medio, costes incluidos. Splits temporales:
+> train, validation y holdout. El holdout está bloqueado: no se usa para
+> elegir parámetros. El hash de integridad mezcla dataset, código y
+> parámetros: el mismo experimento es reproducible. Abajo, walk-forward
+> expanding solo sobre train y validation, un baseline ingenuo y
+> sensibilidad a comisión y slippage. La rentabilidad no es el criterio
+> de éxito del proyecto; sí lo es que el recuento sea auditable.
 
 Si el spinner se alarga: “El motor es determinista; en CPU local este
 histórico tarda unos segundos.” No improvises cifras antes de que salgan.
@@ -114,7 +116,7 @@ evaluación y queda mejor en vídeo (rápido y estable).
 ### 2:25–2:50 — Cierre: no hay trading real
 
 **Opcional (10 s) si vas sobrado:** cambia la pregunta a
-`¿A qué precio cerrará MES mañana?` → Analizar → debe salir **Rechazado**.
+`¿A qué precio cerrará el Micro S&P 500 mañana?` → Analizar → debe salir **Rechazado**.
 
 **Dices (obligatorio, aunque no hagas la pregunta extra):**
 

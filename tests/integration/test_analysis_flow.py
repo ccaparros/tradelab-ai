@@ -97,6 +97,51 @@ def test_live_llm_numeric_hallucination_is_discarded(
         dataset_id=dataset["dataset_id"],
         experiment_id=experiment["experiment_id"],
     )
-    assert output["status"] == "insufficient_evidence"
-    assert "fue descartada" in output["answer"]
-    assert any("999.99" in warning for warning in output["warnings"])
+    assert output["status"] == "completed"
+    assert "999.99" not in (output.get("answer") or "")
+    assert "net_pnl train=" in (output.get("answer") or "")
+    assert any("cifras no respaldadas" in w for w in output.get("warnings") or [])
+    assert (output.get("llm") or {}).get("verifier") == "llm_answer_replaced_by_fallback"
+
+
+@pytest.mark.integration
+def test_fallback_answer_follows_the_question(data_root, sample_bars_nt, monkeypatch):
+    published = publish_canonical_dataset(sample_bars_nt, contract_id=uuid.uuid4())
+    dataset = {
+        "dataset_id": str(published["dataset_id"]),
+        "content_checksum": published["content_checksum"],
+        "storage_uri": published["storage_uri"],
+        "quality_status": "usable",
+        "quality": published["quality"],
+    }
+    upsert_dataset(dataset)
+    experiment = run_experiment(
+        dataset_id=dataset["dataset_id"],
+        parameters={
+            "opening_range_minutes": 15,
+            "atr_period": 5,
+            "atr_filter_mult": 0.0,
+            "stop_risk_mult": 1.0,
+            "target_risk_mult": 2.0,
+            "session_exit_time": "20:00",
+            "commission_per_side": 0.62,
+            "slippage_ticks": 1,
+        },
+    )
+    monkeypatch.setenv("LLM_API_KEY", "")
+
+    profit = run_analysis(
+        query="¿Puede llegar a ser rentable esta estrategia?",
+        dataset_id=dataset["dataset_id"],
+        experiment_id=experiment["experiment_id"],
+    )
+    quality = run_analysis(
+        query="¿Qué dice la calidad del dataset sobre los huecos?",
+        dataset_id=dataset["dataset_id"],
+        experiment_id=experiment["experiment_id"],
+    )
+    assert profit["status"] == "completed"
+    assert quality["status"] == "completed"
+    assert "rentable" in (profit.get("answer") or "").lower()
+    assert "huecos" in (quality.get("answer") or "").lower()
+    assert profit["answer"] != quality["answer"]

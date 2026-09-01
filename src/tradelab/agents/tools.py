@@ -38,6 +38,9 @@ def get_dataset_quality(dataset_id: str) -> dict[str, Any]:
     return {
         "dataset_id": dataset_id,
         "quality_status": ds.get("quality_status"),
+        "coverage_start_utc": ds.get("coverage_start_utc"),
+        "coverage_end_utc": ds.get("coverage_end_utc"),
+        "instrument": ds.get("instrument"),
         **(ds.get("quality") or {}),
     }
 

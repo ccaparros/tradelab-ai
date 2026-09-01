@@ -56,6 +56,20 @@ def numeric_tokens(text: str) -> set[str]:
     return {_normalize_numeric_token(match.group(0)) for match in _NUMERIC_TOKEN.finditer(text)}
 
 
+_YEAR_TOKEN = re.compile(r"\b(?:19|20)\d{2}\b")
+
+
+def redact_unsupported_numbers(text: str, known_numeric_values: set[str]) -> str:
+    """Drop numeric tokens that are not in tool evidence; keep the surrounding prose."""
+
+    def _keep(match: re.Match[str]) -> str:
+        token = _normalize_numeric_token(match.group(0))
+        return match.group(0) if token in known_numeric_values else ""
+
+    cleaned = _NUMERIC_TOKEN.sub(_keep, text)
+    return re.sub(r" {2,}", " ", cleaned).strip()
+
+
 def evidence_numeric_values(evidence: Any) -> set[str]:
     """Collect explicit numbers plus exact percentage renderings from typed evidence."""
     values: set[str] = set()
@@ -85,6 +99,8 @@ def evidence_numeric_values(evidence: Any) -> set[str]:
             if any(part in key for part in ("_id", "hash", "checksum", "uri")):
                 return
             values.update(numeric_tokens(value))
+            values.update(_YEAR_TOKEN.findall(value))
+            return
 
     visit(evidence)
     return values
