@@ -77,5 +77,5 @@ pytest evals -q -m fast
 ## Documentación extra
 
 - Contraste propuesta vs código: [`cobertura_requisitos.md`](cobertura_requisitos.md)
-- Guion vídeo: [`script_2-3min.md`](script_2-3min.md)
+- Guía para grabar el vídeo 2–3 min: [`script_2-3min.md`](script_2-3min.md)
 - Limitaciones: [`limitations.md`](limitations.md)

@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import uuid
+from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
 import pandas as pd
 
 from tradelab.ingestion.storage import write_immutable_parquet
+from tradelab.instruments import get_instrument_spec
 from tradelab.observability.settings import get_settings
 from tradelab.quality.validators import build_quality_report
 
@@ -21,7 +23,15 @@ def publish_canonical_dataset(
     lineage: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Validate, write immutable parquet, return dataset metadata + quality."""
-    report = build_quality_report(df)
+    tick_size: Decimal | None = None
+    if not df.empty:
+        if "instrument" not in df.columns:
+            raise ValueError("canonical frame is missing instrument")
+        symbols = {str(value).strip().upper() for value in df["instrument"].dropna().unique()}
+        if len(symbols) != 1:
+            raise ValueError(f"canonical frame must contain one instrument, got {sorted(symbols)}")
+        tick_size = Decimal(str(get_instrument_spec(next(iter(symbols))).tick_size))
+    report = build_quality_report(df, tick_size=tick_size)
     if report["duplicate_count"] > 0:
         # Never publish duplicates into canonical usable set
         report["quality_status"] = "quarantine"

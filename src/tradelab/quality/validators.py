@@ -2,19 +2,22 @@
 
 from __future__ import annotations
 
+from decimal import Decimal
 from typing import Any
 
 import pandas as pd
 import pandera.errors
 
-from tradelab.ingestion.schemas import validate_bars
+from tradelab.ingestion.schemas import assert_tick_aligned, validate_bars
 from tradelab.quality.gaps import detect_gaps
 
 
 def count_duplicates(df: pd.DataFrame) -> int:
     if df.empty:
         return 0
-    return int(df.duplicated(subset=["source", "contract_month", "bar_size", "timestamp_utc"]).sum())
+    return int(
+        df.duplicated(subset=["source", "contract_month", "bar_size", "timestamp_utc"]).sum()
+    )
 
 
 def count_ohlc_violations(df: pd.DataFrame) -> int:
@@ -33,7 +36,26 @@ def count_ohlc_violations(df: pd.DataFrame) -> int:
     return int(bad.sum())
 
 
-def build_quality_report(df: pd.DataFrame, *, bar_minutes: int = 5) -> dict[str, Any]:
+def count_tick_violations(df: pd.DataFrame, tick_size: Decimal | None) -> int:
+    if df.empty or tick_size is None:
+        return 0
+    prices = [
+        float(value) for column in ("open", "high", "low", "close") for value in df[column].dropna()
+    ]
+    try:
+        assert_tick_aligned(prices, tick_size)
+        return 0
+    except ValueError:
+        tick = float(tick_size)
+        return sum(abs((price / tick) - round(price / tick)) > 1e-6 for price in prices)
+
+
+def build_quality_report(
+    df: pd.DataFrame,
+    *,
+    bar_minutes: int = 5,
+    tick_size: Decimal | None = None,
+) -> dict[str, Any]:
     schema_ok = True
     try:
         if not df.empty:
@@ -43,9 +65,10 @@ def build_quality_report(df: pd.DataFrame, *, bar_minutes: int = 5) -> dict[str,
 
     duplicates = count_duplicates(df)
     ohlc_violations = count_ohlc_violations(df)
+    tick_violations = count_tick_violations(df, tick_size)
     gaps = detect_gaps(df, bar_minutes=bar_minutes)
 
-    if duplicates > 0 or ohlc_violations > 0 or not schema_ok:
+    if duplicates > 0 or ohlc_violations > 0 or tick_violations > 0 or not schema_ok:
         status = "quarantine"
     elif df.empty:
         status = "insufficient"
@@ -57,6 +80,8 @@ def build_quality_report(df: pd.DataFrame, *, bar_minutes: int = 5) -> dict[str,
         "gap_count": len(gaps),
         "gaps": gaps,
         "ohlc_violations": ohlc_violations,
+        "tick_violations": tick_violations,
+        "tick_alignment_ok": tick_violations == 0,
         "quality_status": status,
         "schema_ok": schema_ok,
     }

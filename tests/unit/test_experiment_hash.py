@@ -2,13 +2,14 @@
 
 from __future__ import annotations
 
+import uuid
+
 import pytest
 
 from tradelab.backtesting.hashing import experiment_integrity_hash
 from tradelab.backtesting.service import run_experiment
 from tradelab.datasets.publisher import publish_canonical_dataset
 from tradelab.datasets.store import upsert_dataset
-import uuid
 
 
 @pytest.mark.unit
@@ -26,6 +27,32 @@ def test_hash_stable():
         parameters={"opening_range_minutes": 15},
     )
     assert a == b
+
+
+@pytest.mark.unit
+def test_hash_changes_with_split_or_holdout_scope():
+    common = {
+        "dataset_checksum": "abc",
+        "code_version": "0.1.0:0.1.0:source",
+        "strategy_id": "orb_atr_intraday",
+        "parameters": {"opening_range_minutes": 15},
+    }
+    research = experiment_integrity_hash(
+        **common,
+        split_spec={"train_end": "2026-01-01", "validation_end": "2026-02-01"},
+        consume_holdout=False,
+    )
+    other_split = experiment_integrity_hash(
+        **common,
+        split_spec={"train_end": "2026-01-15", "validation_end": "2026-02-01"},
+        consume_holdout=False,
+    )
+    final = experiment_integrity_hash(
+        **common,
+        split_spec={"train_end": "2026-01-01", "validation_end": "2026-02-01"},
+        consume_holdout=True,
+    )
+    assert len({research, other_split, final}) == 3
 
 
 @pytest.mark.unit

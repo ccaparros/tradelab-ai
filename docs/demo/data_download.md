@@ -2,6 +2,12 @@
 
 ## IBKR (automático) ✅
 
+Instala primero la dependencia opcional del conector:
+
+```powershell
+pip install -e ".[broker]"
+```
+
 El script detecta el socket: **7497** (paper TWS), **7496** (live TWS), **4002/4001** (Gateway).
 La descarga es **solo lectura** (`readonly=True`); no envía órdenes.
 

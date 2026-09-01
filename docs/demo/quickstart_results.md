@@ -1,10 +1,10 @@
 # Quickstart validation results
 
-**Date**: 2026-07-22
+**Date**: 2026-08-31
 
 | Check | OK? |
 |-------|-----|
-| pytest unit/contract/integration/evals | yes (22 passed) |
+| pytest unit/contract/integration/evals | yes (53 passed) |
 | OpenAPI sin rutas de órdenes | yes |
 | Fixtures NT/IBKR generados | yes |
 | `tradelab-load-demo` disponible | yes |

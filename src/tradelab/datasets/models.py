@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-import enum
 import uuid
 from datetime import datetime
 from decimal import Decimal
+from enum import StrEnum
 
 from sqlalchemy import (
     Boolean,
@@ -27,21 +27,21 @@ class Base(DeclarativeBase):
     pass
 
 
-class QualityStatus(str, enum.Enum):
+class QualityStatus(StrEnum):
     usable = "usable"
     quarantine = "quarantine"
     insufficient = "insufficient"
     draft = "draft"
 
 
-class IngestionStatus(str, enum.Enum):
+class IngestionStatus(StrEnum):
     running = "running"
     succeeded = "succeeded"
     failed = "failed"
     partial = "partial"
 
 
-class ContractStatus(str, enum.Enum):
+class ContractStatus(StrEnum):
     active = "active"
     expired = "expired"
     demo = "demo"
@@ -71,7 +71,9 @@ class Contract(Base):
     exchange: Mapped[str] = mapped_column(String(32), nullable=False)
     local_symbol: Mapped[str] = mapped_column(String(64), nullable=False)
     ib_con_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    status: Mapped[ContractStatus] = mapped_column(Enum(ContractStatus), default=ContractStatus.active)
+    status: Mapped[ContractStatus] = mapped_column(
+        Enum(ContractStatus), default=ContractStatus.active
+    )
 
     instrument: Mapped[Instrument] = relationship(back_populates="contracts")
 
@@ -95,7 +97,9 @@ class IngestionRun(Base):
     end_utc: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     request_params: Mapped[dict] = mapped_column(JSONB, default=dict)
     timezone_original: Mapped[str] = mapped_column(String(64), default="UTC")
-    status: Mapped[IngestionStatus] = mapped_column(Enum(IngestionStatus), default=IngestionStatus.running)
+    status: Mapped[IngestionStatus] = mapped_column(
+        Enum(IngestionStatus), default=IngestionStatus.running
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     raw_batches: Mapped[list[RawBarBatch]] = relationship(back_populates="ingestion_run")
@@ -105,7 +109,9 @@ class RawBarBatch(Base):
     __tablename__ = "raw_bar_batches"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    ingestion_run_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("ingestion_runs.id"), nullable=False)
+    ingestion_run_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("ingestion_runs.id"), nullable=False
+    )
     storage_uri: Mapped[str] = mapped_column(Text, nullable=False)
     raw_checksum: Mapped[str] = mapped_column(String(64), nullable=False)
     row_count: Mapped[int] = mapped_column(Integer, default=0)

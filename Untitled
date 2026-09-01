@@ -1,0 +1,1 @@
+python connectors\ninjatrader-csharp\import_csv.py --latest --instrument MES --contract-month 202609

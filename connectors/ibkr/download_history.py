@@ -19,11 +19,14 @@ import socket
 import sys
 import time
 import uuid
-from datetime import date, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pandas as pd
-from ib_insync import IB, Future, util
+
+if TYPE_CHECKING:
+    from ib_insync import IB
 
 # Allow `python -m connectors.ibkr.download_history` from repo root
 ROOT = Path(__file__).resolve().parents[2]
@@ -101,7 +104,7 @@ def _bars_to_frame(
                 "exchange": exchange,
                 "bar_size": "5 mins",
                 "timestamp_utc": ts,
-                "session_date": ts.strftime("%Y-%m-%d"),
+                "session_date": ts.tz_convert("America/Chicago").strftime("%Y-%m-%d"),
                 "open": float(b.open),
                 "high": float(b.high),
                 "low": float(b.low),
@@ -160,6 +163,8 @@ def _fetch_chunk(
 
 
 def _history_contracts(ib: IB, symbol: str, contract_month: str | None, today: date):
+    from ib_insync import Future
+
     if contract_month:
         spec = Future(
             symbol.upper(),
@@ -216,6 +221,13 @@ def download(
     chunk_days: int = 30,
     pace_sec: float = 11.0,
 ) -> dict:
+    try:
+        from ib_insync import IB, util
+    except ImportError as exc:
+        raise RuntimeError(
+            'IBKR connector dependencies are missing; install with pip install -e ".[broker]"'
+        ) from exc
+
     util.startLoop()
     ib = IB()
     errors: list[tuple[int, str]] = []
@@ -343,7 +355,9 @@ def download(
                 {
                     "localSymbol": getattr(c, "localSymbol", None),
                     "conId": getattr(c, "conId", None),
-                    "lastTradeDateOrContractMonth": getattr(c, "lastTradeDateOrContractMonth", None),
+                    "lastTradeDateOrContractMonth": getattr(
+                        c, "lastTradeDateOrContractMonth", None
+                    ),
                     "secType": getattr(c, "secType", None),
                 }
                 for c in contracts
@@ -369,7 +383,7 @@ def download(
             "parquet_uri": str(final_parquet),
             "checksum": checksum,
             "request_params": request_params,
-            "downloaded_at_utc": datetime.now(timezone.utc).isoformat(),
+            "downloaded_at_utc": datetime.now(UTC).isoformat(),
         }
         write_manifest(manifest_path, manifest)
         return manifest

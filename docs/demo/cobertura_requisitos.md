@@ -107,7 +107,7 @@ LLM por defecto: **DeepSeek `deepseek-v4-flash`** (OpenAI-compatible). Sin API k
 | Requisito | Estado |
 |-----------|--------|
 | Splits train / validation / holdout temporales | **Cumple** (~60 / 20 / 20) |
-| Holdout no usado para elegir parámetros | **Cumple** | `assert_holdout_policy` |
+| Holdout no usado para elegir parámetros | **Cumple** | Claim persistido de lectura final única por dataset |
 | Walk-forward | **Cumple** | Expanding sobre train+validation; holdout excluido |
 | Sensibilidad a costes y parámetros cercanos | **Cumple** | Informe + UI Backtest |
 | Baseline simple | **Cumple** | Largo ingenuo open→close por sesión |

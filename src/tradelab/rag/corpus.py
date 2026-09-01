@@ -5,9 +5,13 @@ from __future__ import annotations
 import hashlib
 import json
 import threading
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
+from filelock import FileLock
+
+from tradelab.ingestion.storage import atomic_write_text
 from tradelab.observability.settings import get_settings
 
 _lock = threading.Lock()
@@ -99,11 +103,21 @@ def load_corpus() -> dict[str, Any]:
 
 def save_corpus(data: dict[str, Any]) -> None:
     path = corpus_path()
-    path.write_text(json.dumps(data, indent=2, ensure_ascii=False, default=str), encoding="utf-8")
+    atomic_write_text(
+        path,
+        json.dumps(data, indent=2, ensure_ascii=False, default=str),
+    )
+
+
+@contextmanager
+def _write_guard():
+    with _lock:
+        with FileLock(f"{corpus_path()}.lock"):
+            yield
 
 
 def with_corpus(mutator) -> dict[str, Any]:
-    with _lock:
+    with _write_guard():
         data = load_corpus()
         result = mutator(data)
         save_corpus(data)

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 
 import pandas as pd
@@ -38,8 +37,7 @@ def sample_bars_ibkr() -> pd.DataFrame:
 
 @pytest.fixture()
 def client(data_root):
-    from fastapi.testclient import TestClient
-
     from apps.api.main import app
+    from fastapi.testclient import TestClient
 
     return TestClient(app)

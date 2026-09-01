@@ -6,7 +6,6 @@ import os
 
 import httpx
 import streamlit as st
-
 from helpers import (
     NONE_DATASET,
     NONE_EXPERIMENT,
@@ -53,7 +52,9 @@ if dataset_id:
 
 exp_options = [NONE_EXPERIMENT] + [experiment_label(e, datasets_by_id) for e in filtered_exps]
 if dataset_id and not filtered_exps:
-    st.info("Este dataset aún no tiene backtests. Ejecuta uno en la página **Backtest** o deja el experimento vacío.")
+    st.info(
+        "Este dataset aún no tiene backtests. Ejecuta uno en la página **Backtest** o deja el experimento vacío."
+    )
 
 exp_choice = st.selectbox(
     "Experimento (backtest)",
@@ -96,7 +97,9 @@ with st.expander("Detalle del contexto seleccionado", expanded=bool(dataset_id o
                 f"- id: `{selected_exp['experiment_id']}`"
             )
         else:
-            st.markdown("**Experimento:** ninguno. Preguntas de métricas devolverán evidencia insuficiente.")
+            st.markdown(
+                "**Experimento:** ninguno. Preguntas de métricas devolverán evidencia insuficiente."
+            )
 
 st.markdown("#### 2. Pregunta")
 query = st.text_area(
@@ -106,7 +109,9 @@ query = st.text_area(
 )
 
 if not dataset_id and not experiment_id:
-    st.warning("Sin dataset ni experimento el análisis se limita a documentos (políticas, ADRs, informes).")
+    st.warning(
+        "Sin dataset ni experimento el análisis se limita a documentos (políticas, ADRs, informes)."
+    )
 
 if st.button("Analizar", type="primary", disabled=not query.strip()):
     payload: dict = {"query": query.strip()}

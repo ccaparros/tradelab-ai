@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 import pandas as pd
@@ -31,8 +31,8 @@ def detect_gaps(df: pd.DataFrame, *, bar_minutes: int = 5) -> list[dict[str, Any
     for prev, curr in zip(ts.iloc[:-1], ts.iloc[1:], strict=False):
         delta = curr.to_pydatetime() - prev.to_pydatetime()
         if delta > expected + timedelta(seconds=1):
-            start = prev.to_pydatetime().astimezone(timezone.utc)
-            end = curr.to_pydatetime().astimezone(timezone.utc)
+            start = prev.to_pydatetime().astimezone(UTC)
+            end = curr.to_pydatetime().astimezone(UTC)
             gaps.append(
                 {
                     "start_utc": start.isoformat(),

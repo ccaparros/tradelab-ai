@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
+import httpx
+
 NONE_DATASET = "— Sin dataset (solo políticas / informes) —"
 NONE_EXPERIMENT = "— Sin experimento (sin métricas de backtest) —"
 
@@ -28,9 +30,7 @@ def is_demo(ds: dict[str, Any]) -> bool:
 
 def preferred_source(ds: dict[str, Any]) -> str:
     return str(
-        ds.get("preferred_source")
-        or (ds.get("lineage") or {}).get("preferred_source")
-        or "?"
+        ds.get("preferred_source") or (ds.get("lineage") or {}).get("preferred_source") or "?"
     )
 
 
@@ -45,7 +45,9 @@ def dataset_label(ds: dict[str, Any]) -> str:
     )
 
 
-def experiment_label(exp: dict[str, Any], datasets_by_id: dict[str, dict[str, Any]] | None = None) -> str:
+def experiment_label(
+    exp: dict[str, Any], datasets_by_id: dict[str, dict[str, Any]] | None = None
+) -> str:
     datasets_by_id = datasets_by_id or {}
     ds = datasets_by_id.get(str(exp.get("dataset_id")), {})
     instrument = ds.get("instrument") or "?"
@@ -65,3 +67,15 @@ def fetch_json(client, path: str) -> dict[str, Any]:
     r = client.get(path, timeout=30)
     r.raise_for_status()
     return r.json()
+
+
+def get_json(url: str, *, timeout: float = 30) -> dict[str, Any]:
+    """GET JSON from the TradeLab API; fail if the response is not this API."""
+    r = httpx.get(url, timeout=timeout)
+    r.raise_for_status()
+    payload = r.json()
+    if not isinstance(payload, dict):
+        raise RuntimeError(f"Respuesta inesperada de {url}")
+    if "detail" in payload and "items" not in payload and "dataset_id" not in payload:
+        raise RuntimeError(str(payload.get("detail")))
+    return payload

@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 import pytest
 
 from tradelab.rag.chunking import chunk_text
@@ -39,7 +37,9 @@ def test_index_and_retrieve_report(data_root, tmp_path):
     top = hits[0]
     assert "document_id" in top and "chunk_id" in top
     blob = (top.get("excerpt") or "") + (top.get("title") or "")
-    assert "quarantine" in blob.lower() or "reconciliation" in blob.lower() or "ibkr" in blob.lower()
+    assert (
+        "quarantine" in blob.lower() or "reconciliation" in blob.lower() or "ibkr" in blob.lower()
+    )
 
 
 @pytest.mark.unit

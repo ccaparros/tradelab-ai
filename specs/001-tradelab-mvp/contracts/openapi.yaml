@@ -470,13 +470,13 @@ components:
         dataset_id: { type: string, format: uuid }
         strategy_id:
           type: string
-          enum: [orb_atr_intraday]
+          enum: [orb_atr_intraday, vwap_fade_intraday]
         parameters: { type: object, additionalProperties: true }
         split_spec: { type: object, additionalProperties: true }
         consume_holdout:
           type: boolean
           default: false
-          description: Must remain false during parameter selection
+          description: Final one-time holdout reveal; a second reveal returns HTTP 409
 
     ExperimentSummary:
       type: object
@@ -498,6 +498,7 @@ components:
           properties:
             parameters: { type: object, additionalProperties: true }
             metrics_by_split: { type: object, additionalProperties: true }
+            market: { type: object, additionalProperties: true }
             holdout_consumed: { type: boolean }
             report_uri: { type: string, nullable: true }
 

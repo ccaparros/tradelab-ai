@@ -14,7 +14,7 @@ import argparse
 import json
 import sys
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import pandas as pd
@@ -46,6 +46,7 @@ def import_csv(
     ts = pd.to_datetime(raw["timestamp_exchange"])
     if getattr(ts.dt, "tz", None) is None:
         ts = ts.dt.tz_localize(timezone_original, ambiguous="infer", nonexistent="shift_forward")
+    session_date = ts.dt.tz_convert("America/Chicago").dt.strftime("%Y-%m-%d")
     ts = ts.dt.tz_convert("UTC")
 
     run_id = str(uuid.uuid4())
@@ -62,7 +63,7 @@ def import_csv(
             "exchange": exchange,
             "bar_size": "5 mins",
             "timestamp_utc": ts,
-            "session_date": ts.dt.strftime("%Y-%m-%d"),
+            "session_date": session_date,
             "open": raw["open"].astype(float),
             "high": raw["high"].astype(float),
             "low": raw["low"].astype(float),
@@ -92,7 +93,7 @@ def import_csv(
             "session_template": "CME US Index Futures RTH",
             "importer": "connectors/ninjatrader-csharp/import_csv.py",
         },
-        "downloaded_at_utc": datetime.now(timezone.utc).isoformat(),
+        "downloaded_at_utc": datetime.now(UTC).isoformat(),
     }
     write_manifest(manifest_path, manifest)
     return manifest
@@ -118,7 +119,7 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         csv_path = files[0]
 
-    contract_month = args.contract_month or datetime.now(timezone.utc).strftime("%Y%m")
+    contract_month = args.contract_month or datetime.now(UTC).strftime("%Y%m")
     try:
         manifest = import_csv(
             csv_path,

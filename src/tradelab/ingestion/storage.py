@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -20,6 +22,25 @@ def sha256_file(path: Path) -> str:
 
 def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def atomic_write_text(path: Path, text: str) -> None:
+    """Durably replace a text file without exposing partial contents."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+        dir=path.parent,
+    )
+    temporary_path = Path(temporary)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="") as handle:
+            handle.write(text)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary_path, path)
+    finally:
+        temporary_path.unlink(missing_ok=True)
 
 
 def write_immutable_parquet(df: pd.DataFrame, path: Path) -> str:

@@ -8,6 +8,7 @@ from typing import Any
 
 import pandas as pd
 
+from tradelab.backtesting.sessions import exchange_local_time, with_session_date
 from tradelab.backtesting.strategies.orb_atr import OrbAtrParams
 
 
@@ -105,16 +106,15 @@ def run_orb_atr(
     *,
     tick_size: float = 0.25,
     multiplier: float = 5.0,
+    session_timezone: str = "America/Chicago",
     split_label: str = "train",
 ) -> list[TradeFill]:
     if df.empty:
         return []
 
-    work = df.copy()
-    work["timestamp_utc"] = pd.to_datetime(work["timestamp_utc"], utc=True)
+    work = with_session_date(df, session_timezone)
     work = work.sort_values("timestamp_utc").reset_index(drop=True)
     work["atr"] = _shifted_atr(work, params.atr_period)
-    work["session_date"] = work["timestamp_utc"].dt.strftime("%Y-%m-%d")
 
     exit_t = _parse_hhmm(params.session_exit_time)
     slip = params.slippage_ticks * tick_size
@@ -140,7 +140,7 @@ def run_orb_atr(
         for i in range(orb_bars, len(session_df)):
             row = session_df.iloc[i]
             ts: datetime = row["timestamp_utc"].to_pydatetime()
-            local_t = ts.timetz().replace(tzinfo=None)
+            local_t = exchange_local_time(ts, session_timezone)
             atr = row["atr"]
             if pd.isna(atr):
                 continue
@@ -149,7 +149,6 @@ def run_orb_atr(
             if orb_range < float(atr) * params.atr_filter_mult:
                 continue
 
-            price_open = float(row["open"])
             price_high = float(row["high"])
             price_low = float(row["low"])
             price_close = float(row["close"])

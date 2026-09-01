@@ -27,9 +27,13 @@ dependencies = [
   "httpx>=0.27.0",
   "python-dotenv>=1.0.0",
   "pgvector>=0.3.0",
+  "filelock>=3.16.0",
 ]
 
 [project.optional-dependencies]
+broker = [
+  "ib-insync>=0.9.86",
+]
 dev = [
   "pytest>=8.3.0",
   "pytest-asyncio>=0.24.0",
@@ -53,6 +57,7 @@ src = ["src", "apps", "tests", "connectors"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]
 
 [tool.pytest.ini_options]
 minversion = "8.0"

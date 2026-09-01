@@ -7,6 +7,8 @@ from typing import Any
 
 import pandas as pd
 
+from tradelab.backtesting.sessions import with_session_date
+
 
 @dataclass
 class SplitSpec:
@@ -15,36 +17,74 @@ class SplitSpec:
     holdout_end: str | None = None
 
 
-def apply_temporal_split(df: pd.DataFrame, spec: SplitSpec) -> dict[str, pd.DataFrame]:
-    ts = pd.to_datetime(df["timestamp_utc"], utc=True)
-    train_end = pd.Timestamp(spec.train_end, tz="UTC")
-    val_end = pd.Timestamp(spec.validation_end, tz="UTC")
-    holdout_end = pd.Timestamp(spec.holdout_end, tz="UTC") if spec.holdout_end else ts.max()
+def _utc_timestamp(value: str | pd.Timestamp) -> pd.Timestamp:
+    timestamp = pd.Timestamp(value)
+    if timestamp.tzinfo is None:
+        return timestamp.tz_localize("UTC")
+    return timestamp.tz_convert("UTC")
 
-    return {
-        "train": df.loc[ts <= train_end].copy(),
-        "validation": df.loc[(ts > train_end) & (ts <= val_end)].copy(),
-        "holdout": df.loc[(ts > val_end) & (ts <= holdout_end)].copy(),
+
+def apply_temporal_split(
+    df: pd.DataFrame,
+    spec: SplitSpec,
+    *,
+    session_timezone: str = "America/Chicago",
+) -> dict[str, pd.DataFrame]:
+    work = with_session_date(df, session_timezone)
+    ts = work["timestamp_utc"]
+    train_end = _utc_timestamp(spec.train_end)
+    val_end = _utc_timestamp(spec.validation_end)
+    holdout_end = _utc_timestamp(spec.holdout_end) if spec.holdout_end else ts.max()
+    if not train_end <= val_end <= holdout_end:
+        raise ValueError("split boundaries must satisfy train_end <= validation_end <= holdout_end")
+
+    parts = {
+        "train": work.loc[ts <= train_end].copy(),
+        "validation": work.loc[(ts > train_end) & (ts <= val_end)].copy(),
+        "holdout": work.loc[(ts > val_end) & (ts <= holdout_end)].copy(),
     }
+    session_sets = {
+        label: set(part["session_date"].astype(str).unique()) for label, part in parts.items()
+    }
+    if (
+        session_sets["train"] & session_sets["validation"]
+        or session_sets["train"] & session_sets["holdout"]
+        or session_sets["validation"] & session_sets["holdout"]
+    ):
+        raise ValueError("split boundary cuts through an exchange session")
+    return parts
 
 
-def assert_holdout_policy(*, consume_holdout: bool, selecting_parameters: bool) -> None:
-    if selecting_parameters and consume_holdout:
-        raise PermissionError("policy_violation: holdout cannot be consumed during parameter selection")
-
-
-def default_split_from_frame(df: pd.DataFrame) -> SplitSpec:
-    ts = pd.to_datetime(df["timestamp_utc"], utc=True).sort_values()
-    if len(ts) < 3:
-        mid = ts.iloc[-1]
-        return SplitSpec(train_end=str(mid), validation_end=str(mid), holdout_end=str(mid))
-    n = len(ts)
-    i_train = max(0, int(n * 0.6) - 1)
-    i_val = max(i_train + 1, int(n * 0.8) - 1)
+def default_split_from_frame(
+    df: pd.DataFrame,
+    *,
+    session_timezone: str = "America/Chicago",
+) -> SplitSpec:
+    if df.empty:
+        raise ValueError("cannot split an empty dataset")
+    work = with_session_date(df, session_timezone).sort_values("timestamp_utc")
+    session_ends = work.groupby("session_date", sort=False)["timestamp_utc"].max()
+    n_sessions = len(session_ends)
+    if n_sessions == 1:
+        only_end = session_ends.iloc[0]
+        return SplitSpec(
+            train_end=str(only_end),
+            validation_end=str(only_end),
+            holdout_end=str(only_end),
+        )
+    if n_sessions == 2:
+        return SplitSpec(
+            train_end=str(session_ends.iloc[0]),
+            validation_end=str(session_ends.iloc[1]),
+            holdout_end=str(session_ends.iloc[1]),
+        )
+    train_sessions = max(1, int(n_sessions * 0.6))
+    validation_sessions = max(train_sessions + 1, int(n_sessions * 0.8))
+    validation_sessions = min(validation_sessions, n_sessions - 1)
     return SplitSpec(
-        train_end=str(ts.iloc[i_train]),
-        validation_end=str(ts.iloc[i_val]),
-        holdout_end=str(ts.iloc[-1]),
+        train_end=str(session_ends.iloc[train_sessions - 1]),
+        validation_end=str(session_ends.iloc[validation_sessions - 1]),
+        holdout_end=str(session_ends.iloc[-1]),
     )
 
 
@@ -61,14 +101,12 @@ def expanding_walk_forward_windows(
     *,
     n_folds: int = 3,
     min_train_sessions: int = 5,
+    session_timezone: str = "America/Chicago",
 ) -> list[dict[str, Any]]:
     """Causal expanding windows. Train sessions always precede test sessions."""
     if df.empty:
         return []
-    work = df.copy()
-    ts = pd.to_datetime(work["timestamp_utc"], utc=True)
-    if "session_date" not in work.columns:
-        work["session_date"] = ts.dt.strftime("%Y-%m-%d")
+    work = with_session_date(df, session_timezone)
     sessions = sorted(work["session_date"].astype(str).unique())
     n = len(sessions)
     if n < min_train_sessions + 1:

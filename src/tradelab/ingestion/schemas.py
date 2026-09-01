@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from decimal import Decimal
 
-import pandera.pandas as pa
 from pandera.pandas import Check, Column, DataFrameSchema
 
 
@@ -32,9 +31,17 @@ CanonicalBarSchema = DataFrameSchema(
         "raw_checksum": Column(str),
     },
     checks=[
-        Check(lambda df: (df["low"] <= df["open"]) & (df["open"] <= df["high"]), error="open not in [low,high]"),
-        Check(lambda df: (df["low"] <= df["close"]) & (df["close"] <= df["high"]), error="close not in [low,high]"),
-        Check(lambda df: df["timestamp_utc"].is_monotonic_increasing, error="timestamps not monotonic"),
+        Check(
+            lambda df: (df["low"] <= df["open"]) & (df["open"] <= df["high"]),
+            error="open not in [low,high]",
+        ),
+        Check(
+            lambda df: (df["low"] <= df["close"]) & (df["close"] <= df["high"]),
+            error="close not in [low,high]",
+        ),
+        Check(
+            lambda df: df["timestamp_utc"].is_monotonic_increasing, error="timestamps not monotonic"
+        ),
     ],
     coerce=True,
     strict=False,

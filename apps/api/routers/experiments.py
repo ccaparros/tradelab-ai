@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from tradelab.agents.tools import generate_experiment_report, list_strategies
 from tradelab.backtesting.service import run_experiment

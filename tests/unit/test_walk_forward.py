@@ -5,8 +5,13 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-from tradelab.backtesting.splits import expanding_walk_forward_windows
 from tradelab.backtesting.robustness import neighbor_parameter_sets, run_session_long_baseline
+from tradelab.backtesting.sessions import exchange_local_time, with_session_date
+from tradelab.backtesting.splits import (
+    apply_temporal_split,
+    default_split_from_frame,
+    expanding_walk_forward_windows,
+)
 
 
 def _sessions(n: int) -> pd.DataFrame:
@@ -73,3 +78,36 @@ def test_orb_neighbors_include_alternate_opening_range():
     )
     ors = {v["opening_range_minutes"] for v in variants}
     assert 30 in ors
+
+
+@pytest.mark.unit
+def test_default_split_never_divides_an_exchange_session():
+    frame = _sessions(10)
+    split = default_split_from_frame(frame)
+    parts = apply_temporal_split(frame, split)
+    session_sets = {label: set(part["session_date"].unique()) for label, part in parts.items()}
+    assert len(session_sets["train"]) == 6
+    assert len(session_sets["validation"]) == 2
+    assert len(session_sets["holdout"]) == 2
+    assert session_sets["train"].isdisjoint(session_sets["validation"])
+    assert session_sets["train"].isdisjoint(session_sets["holdout"])
+    assert session_sets["validation"].isdisjoint(session_sets["holdout"])
+
+
+@pytest.mark.unit
+def test_session_labels_and_clock_follow_chicago_dst():
+    frame = pd.DataFrame(
+        {
+            "timestamp_utc": [
+                "2026-06-04T00:30:00Z",
+                "2026-06-04T01:00:00Z",
+            ]
+        }
+    )
+    labeled = with_session_date(frame, "America/Chicago")
+    assert set(labeled["session_date"]) == {"2026-06-03"}
+
+    winter = pd.Timestamp("2026-01-15T20:00:00Z").to_pydatetime()
+    summer = pd.Timestamp("2026-07-15T20:00:00Z").to_pydatetime()
+    assert exchange_local_time(winter, "America/Chicago").hour == 14
+    assert exchange_local_time(summer, "America/Chicago").hour == 15

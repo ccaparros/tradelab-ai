@@ -6,7 +6,7 @@ from typing import Any
 
 from tradelab.backtesting.service import run_experiment
 from tradelab.backtesting.strategies.registry import list_strategy_specs
-from tradelab.datasets.store import get_dataset, get_experiment, list_datasets
+from tradelab.datasets.store import get_dataset, get_experiment
 from tradelab.quality.reconcile import reconcile_frames
 
 ALLOWED_TOOLS = frozenset(
@@ -38,6 +38,9 @@ def get_dataset_quality(dataset_id: str) -> dict[str, Any]:
     return {
         "dataset_id": dataset_id,
         "quality_status": ds.get("quality_status"),
+        "coverage_start_utc": ds.get("coverage_start_utc"),
+        "coverage_end_utc": ds.get("coverage_end_utc"),
+        "instrument": ds.get("instrument"),
         **(ds.get("quality") or {}),
     }
 
@@ -78,7 +81,9 @@ def get_experiment_metrics(experiment_id: str) -> dict[str, Any]:
     }
 
 
-def get_trade_sample(experiment_id: str, *, split_label: str | None = None, limit: int = 50) -> list[dict[str, Any]]:
+def get_trade_sample(
+    experiment_id: str, *, split_label: str | None = None, limit: int = 50
+) -> list[dict[str, Any]]:
     exp = get_experiment(experiment_id)
     if not exp:
         raise FileNotFoundError("not_found")

@@ -56,7 +56,9 @@ def index_markdown(
         if existing and existing.get("content_checksum") == checksum:
             return {
                 "document_id": doc_id,
-                "chunk_count": sum(1 for c in data["chunks"].values() if c.get("document_id") == doc_id),
+                "chunk_count": sum(
+                    1 for c in data["chunks"].values() if c.get("document_id") == doc_id
+                ),
                 "skipped": True,
             }
         _remove_document(data, doc_id)
